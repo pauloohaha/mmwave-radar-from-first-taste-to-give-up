@@ -22,7 +22,8 @@ This document briefly introduces a few mmWave radar devices. Start from page 47,
 2.	[mmwave sdk user guide](https://dr-download.ti.com/software-development/software-development-kit-sdk/MD-PIrUeCYr3X/03.05.00.04/mmwave_sdk_user_guide.pdf)  
 This document introduces some basic operations on the radar. Firstly, the document introduces how to run the out of box demo with mmwave demo visualizer, this can give user an idea about what the radar is capable of. Next, the document introduces how to program the radar and the structure of radar program. The document is suitable for anyone that aim to modify the internal program of the radar.  
 
-3. Out-of-Box Demo
+3. Out-of-Box Demo  
+Out-of-Box (OOB) Demo shows you the basic capability of the mmwave radar. Your radar shoulded be shipped with a OOB program loaded. You can connect it to a computer and lunch [Mmw Demo Visualizer](https://dev.ti.com/gallery/view/mmwave/mmWave_Demo_Visualizer/ver/4.2.0/). Try the different settings and see the results.
   
 ###	Working principle of radar
 1.	[The fundamentals of millimeter wave radar sensors](https://www.ti.com/lit/pdf/spyy005)  
