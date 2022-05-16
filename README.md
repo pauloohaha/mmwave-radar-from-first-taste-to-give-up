@@ -15,7 +15,7 @@ In the *Datapath* branch, I will summarize the information from *mmwave_sdk_modu
 Most of the knowledge covered here are read from documents produced by TI. They have done an excellent job creating these documents, credits to them.  
 
 Most of the documents can be downloaded at:  
-official page for the radar [IWR6843AOP](https://www.ti.com/product/IWR6843AOP)  (The IC itself)  Here contains documents about the operating principle and working mechanisms.
+page for the radar [IWR6843AOP](https://www.ti.com/product/IWR6843AOP)  (The IC itself)  Here contains documents about the operating principle and working mechanisms.
 page for it's evaluation module [IWR6843AOPEVM](https://www.ti.com/tool/IWR6843AOPEVM)  (The IC plus a circuit board to run and develop the radar) Here only has documents about the whole modules, such as circuit board design and so on.
   
 Other documents can be found in mmwave industrial toolbox and mmwave sdk. You need to download and install them on your computer, and access the document files.  
