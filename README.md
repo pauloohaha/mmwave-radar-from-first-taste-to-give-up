@@ -1,5 +1,5 @@
 # mmwave-radar-from-first-taste-to-give-up
-I am a student who try to use mmwave radar from Texas Instrument (TI) to do some projects. I will try to formulate some of my understanding here and they may help others.
+ttttttI am a student who try to use mmwave radar from Texas Instrument (TI) to do some projects. I will try to formulate some of my understanding here and they may help others.
 
 I mainly use IWR6843AOP and it's evaluation module. I also use MMWAVEICBOOST for debugging.
 
