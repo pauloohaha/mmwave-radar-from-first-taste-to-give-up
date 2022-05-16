@@ -5,7 +5,8 @@ I mainly use IWR6843AOP and it's evaluation module. I also use MMWAVEICBOOST for
 
 ## Advices for beginners
 When starting to learn the MMWave radar, the biggest problem a beginner faces is finding and understanding documents. It was very hard for me to find the document I wanted and there were to many nouns that I didn't understand. Luckily, there are a lot of friendly engineers and advisors in E2E form, they know the radar system very well and often can answer my questions timely. If you are facing some problems as a beginner, please visit the [E2E form](https://e2e.ti.com/) and find whether others have met the same problem before. Don't hesitate to ask for help if your problem is new.
-
+  
+## About
 In this repository, I will not cover everthing about the radar. I am not capable of that and I think most documents are easy to understand. But, I will introduce to you, from my own experience, where to start, what to read and in which order. In the *Learning Guide* file, I will briefly introduce the radar system. Then guide you through some improtant documents that you may wish to read first.  
 
 In the *Datapath* branch, I will summarize the information from *mmwave_sdk_module_documentation* and provide my own understandings about the processing of the data in the radar system.  
