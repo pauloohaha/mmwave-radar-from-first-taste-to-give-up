@@ -11,4 +11,34 @@ The data processing need to transfer the ADC sample results into range and doppl
 
 The results will then be send to external devices.  
   
-## Reading List
+## Recommended reading order of the documents
+  
+### Basic usage of the radar
+1.	[mmwave sensors userguide](https://www.ti.com/lit/pdf/swru546)  
+This document briefly introduces a few mmWave radar devices. Start from page 47, the document introduces the appearance of IWR6843AOPEVM. It also covers how to connect the module to a computer, how to install it on a MMWAVEICBOOST for debugging of program in the radar. This document is suitable for first receiving the radar and learn how to setup the radar for testing.  
+  
+2.	[mmwave sdk user guide](https://dr-download.ti.com/software-development/software-development-kit-sdk/MD-PIrUeCYr3X/03.05.00.04/mmwave_sdk_user_guide.pdf)  
+This document introduces some basic operations on the radar. Firstly, the document introduces how to run the out of box demo with mmwave demo visualizer, this can give user an idea about what the radar is capable of. Next, the document introduces how to program the radar and the structure of radar program. The document is suitable for anyone that aim to modify the internal program of the radar.  
+  
+###	Working principle of radar
+1.	[The fundamentals of millimeter wave radar sensors](https://www.ti.com/lit/pdf/spyy005)  
+This document introduces the basic principle of millimeter wave radar, including how radar measure the range, velocity and the angle of objects. This is also introduced in [video from training.ti.com](https://training.ti.com/intro-mmwave-sensing-fmcw-radars-module-1-range-estimation). This document and videos are suitable for understanding basic principle of millimeter wave radar and is a must for almost all further operations on radar.  
+  
+2.	[MIMO Radar](https://www.ti.com/lit/pdf/swra554)  
+This document further introduces how the mmwave radar with multiple receiving antennas estimate the angle of the detected object. This document is a complement for the The fundamentals of millimeter wave radar sensors, it helps to from a comprehensive understanding of the mechanism of mmWave radar.
+  
+###	Documents for radar data processing architectures  
+1.	[mmwave sdk user guide](https://dr-download.ti.com/software-development/software-development-kit-sdk/MD-PIrUeCYr3X/03.05.00.04/mmwave_sdk_user_guide.pdf) , session 5, start from page 42  
+This document introduces the architecture of the software in the mmWave radar. This includes the functionality of different layers and components in the mmWave radar software, such as data path manager, data processing chain and data processing unit. This document may not be easy to understand, but it gives a brief idea of how the system is constructed and how data is processed in the radar.  
+  
+2.	[introduction to the DSP Subsystem in the IWR6843](https://www.ti.com/lit/pdf/swra621)  
+This document briefly introduces the function and operations in the DSP and HWA of the radar system. It corresponds to the data processing unit (DPU) in the software. This document helps to understand how algorithms such as FFT and CFAR is preformed on the data from ADC inside HWA and DSP, and how data is transferred between different algorithms. This document is a must for whom wish to modify the signal processing algorithm inside radar.  
+  
+###	Documents for software of the radar  
+1. mmwave_sdk_module_documentation  
+Located at mmwave_sdk<version>\docs. This document give links to documents of code of radar software. It includes the brief introductions for all functions and data structures. It also contains some detailed introductions of the mechanisms and workflow of demo and different modules.   
+ 
+2. Template codes  
+The template codes are located in the test folder of different modules. These templates are much smaller and simpler than the demo code and are easier to track and follow. They demo the usage of module APIs or the working principle of the modules of interest.
+
+
