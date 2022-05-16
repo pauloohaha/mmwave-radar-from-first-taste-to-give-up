@@ -9,7 +9,9 @@ The radar system can be roughly seperated into 2 parts. RF part and data process
 RF part is responsible for transmitting, receving and sampling of the RF signals. It generats a large amout of data, which then be processed by the data processing part.  
 The data processing need to transfer the ADC sample results into range and doppler informations for object detection. The ADC sample of received signal need to go through multiple computations, also called data processing units (DPUs), such as Range FFT, optinal Static Clutter Removal (which makes the radar only detect moving objects), Doppler FFT, CFAR (detect objects according to range and doppler signal) and Angle of Arrival (AoA) FFT. These computations goes one after another and form a data processing chain (DPC). The DPC is controlled by data path manager (DPM). 
 
-The results will then be send to external devices.  
+For IWR6843AOP, which pocesses Hardware Accelerator and Digital Signal Processor, the data processing tasks can be done by these 2 components with little supervison from main processor.
+
+The result of data process will then be send to external devices with a few possible communication protocols.
   
 ## Recommended reading order of the documents
   
@@ -19,6 +21,8 @@ This document briefly introduces a few mmWave radar devices. Start from page 47,
   
 2.	[mmwave sdk user guide](https://dr-download.ti.com/software-development/software-development-kit-sdk/MD-PIrUeCYr3X/03.05.00.04/mmwave_sdk_user_guide.pdf)  
 This document introduces some basic operations on the radar. Firstly, the document introduces how to run the out of box demo with mmwave demo visualizer, this can give user an idea about what the radar is capable of. Next, the document introduces how to program the radar and the structure of radar program. The document is suitable for anyone that aim to modify the internal program of the radar.  
+
+3. Out-of-Box Demo
   
 ###	Working principle of radar
 1.	[The fundamentals of millimeter wave radar sensors](https://www.ti.com/lit/pdf/spyy005)  
