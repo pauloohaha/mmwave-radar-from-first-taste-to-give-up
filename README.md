@@ -37,5 +37,11 @@ Four local memory allow a special *Ping-Pong* operation. Since HWA need to read 
 
 ![图片](https://user-images.githubusercontent.com/85469000/168817727-aa274abd-9420-4955-8b9f-82aa5f0c4845.png)
 
+The **Core Computation Unit** is the component to perform acutual computations. It is capable of FFT, pre-FFT (windowing, zero-out, etc.), CFAR, maganitude and log-magnitude computations.  
+  
+The **input and output formattor** interface between the input (or output) data format and the internal HWA data format. They are also responsible for reading and writing data from and into local MEM.  
+  
+The **State Machine**  is responsible for controlling the HWA. It can chain and loop through a sequence of parameter sets one after another. The state machine has 2 kinds of registers, parameter-set memories (responsible for controlling the computation) and static register (responsible for controlling the execution of parameter-set defined operations). The parameter-set memory can specify -which kind of operation, -input and output data format, -number of iterations this parameter set is executed (BCNT), -the condition which trigger the execution or stalled until. The static registers define the pattern of parameter-set is executed.
+
 
 
