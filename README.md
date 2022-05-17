@@ -43,5 +43,9 @@ The **input and output formattor** interface between the input (or output) data 
   
 The **State Machine**  is responsible for controlling the HWA. It can chain and loop through a sequence of parameter sets one after another. The state machine has 2 kinds of registers, parameter-set memories (responsible for controlling the computation) and static register (responsible for controlling the execution of parameter-set defined operations). The parameter-set memory can specify -which kind of operation, -input and output data format, -number of iterations this parameter set is executed (BCNT), -the condition which trigger the execution or stalled until. The static registers define the pattern of parameter-set is executed.
 
+You can refer to [Radar Hardware Accelerator User's Guide](http://www.ti.com/lit/pdf/SWRU526) for more details.  
+  
+### Enhanced-DMA (EDMA)
+
 
 
