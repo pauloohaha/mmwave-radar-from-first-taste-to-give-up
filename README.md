@@ -12,5 +12,7 @@ The Data Processing Chain (DPC) is the layer that cordinate different processes 
 The Data Processing Unit (DPU) is the layer responsible for configurating the Hardware Accelerator (HWA) and Digital Signal Processor (DSP) for different computations. DPU need to set the correct triggering sequences, data transfer sequences, computation settings, etc..  
   
 When the HWA or the DSP are configurated correctly, they will start computations once they receive the ADC samples. The Enhanced Direct Memory Access (EDMA), will help to transfer data. Thus, there is no need for the main processor to intervene during the acutal computation.
-![图片](https://user-images.githubusercontent.com/85469000/168749740-30ee4d2c-2009-47d5-a890-1e2a991a9d72.png)
+>![图片](https://user-images.githubusercontent.com/85469000/168749740-30ee4d2c-2009-47d5-a890-1e2a991a9d72.png)
+*mmwave sdk userguide P50*  
+  
 You should refer to *mmwave sdk user guide* and the *mmwave sdk module document* for detailed sequence and functions of each module.
