@@ -13,9 +13,11 @@ For IWR6843AOP, which pocesses Hardware Accelerator and Digital Signal Processor
 
 The result of data process will then be send to external devices with a few possible communication protocols.
   
-## Recommended reading order of the documents
+## Recommended reading order of the documents  
+Before getting your hands on the code, you need to understand the operation principle of the mmwave radar. Bellow I will introduce some essential documents.
   
-### Basic usage of the radar
+### Basic usage of the radar  
+You should first learn how to use the module to aviod causing damage to it. Following these 3 documents introduce some basic idea of the mmwave radar, including how to power it on, how to connect it to a computer, how to flash program into it, how to run the out-of-box demo, etc.  
 1.	[mmwave sensors userguide](https://www.ti.com/lit/pdf/swru546)  
 This document briefly introduces a few mmWave radar devices. Start from page 47, the document introduces the appearance of IWR6843AOPEVM. It also covers how to connect the module to a computer, how to install it on a MMWAVEICBOOST for debugging of program in the radar. This document is suitable for first receiving the radar and learn how to setup the radar for testing.  
   
@@ -23,9 +25,11 @@ This document briefly introduces a few mmWave radar devices. Start from page 47,
 This document introduces some basic operations on the radar. Firstly, the document introduces how to run the out of box demo with mmwave demo visualizer, this can give user an idea about what the radar is capable of. Next, the document introduces how to program the radar and the structure of radar program. The document is suitable for anyone that aim to modify the internal program of the radar.  
 
 3. Out-of-Box Demo  
-Out-of-Box (OOB) Demo shows you the basic capability of the mmwave radar. Your radar shoulded be shipped with a OOB program loaded. You can connect it to a computer and lunch [Mmw Demo Visualizer](https://dev.ti.com/gallery/view/mmwave/mmWave_Demo_Visualizer/ver/4.2.0/). Try the different settings and see the results.
+Out-of-Box (OOB) Demo shows you the basic capability of the mmwave radar. Your radar shoulded be shipped with a OOB program loaded. You can connect it to a computer and lunch [Mmw Demo Visualizer](https://dev.ti.com/gallery/view/mmwave/mmWave_Demo_Visualizer/ver/4.2.0/). Try the different settings and see the results.  
   
-###	Working principle of radar
+###	Working principle of radar  
+Next, it is basic to know the operating principle of the mmwave radar. Following two documents introduce what a *chirp* means in mmwave radar, how the radar use it to detect the range, velocity and the position of objects. Without this knowledge, it is hard to understand any further material.  
+
 1.	[The fundamentals of millimeter wave radar sensors](https://www.ti.com/lit/pdf/spyy005)  
 This document introduces the basic principle of millimeter wave radar, including how radar measure the range, velocity and the angle of objects. This is also introduced in [video from training.ti.com](https://training.ti.com/intro-mmwave-sensing-fmcw-radars-module-1-range-estimation). This document and videos are suitable for understanding basic principle of millimeter wave radar and is a must for almost all further operations on radar.  
   
@@ -33,6 +37,7 @@ This document introduces the basic principle of millimeter wave radar, including
 This document further introduces how the mmwave radar with multiple receiving antennas estimate the angle of the detected object. This document is a complement for the The fundamentals of millimeter wave radar sensors, it helps to from a comprehensive understanding of the mechanism of mmWave radar.
   
 ###	Documents for radar data processing architectures  
+You may wish to modify the algorithm of the radar to realise your won purpose. Thus, you need to understand how the radar process the data. The following 2 documents introduce the mechanism of radar data processing units.
 1.	[mmwave sdk user guide](https://dr-download.ti.com/software-development/software-development-kit-sdk/MD-PIrUeCYr3X/03.05.00.04/mmwave_sdk_user_guide.pdf) , session 5, start from page 42  
 This document introduces the architecture of the software in the mmWave radar. This includes the functionality of different layers and components in the mmWave radar software, such as data path manager, data processing chain and data processing unit. This document may not be easy to understand, but it gives a brief idea of how the system is constructed and how data is processed in the radar.  
   
@@ -40,6 +45,7 @@ This document introduces the architecture of the software in the mmWave radar. T
 This document briefly introduces the function and operations in the DSP and HWA of the radar system. It corresponds to the data processing unit (DPU) in the software. This document helps to understand how algorithms such as FFT and CFAR is preformed on the data from ADC inside HWA and DSP, and how data is transferred between different algorithms. This document is a must for whom wish to modify the signal processing algorithm inside radar.  
   
 ###	Documents for software of the radar  
+Now you can try to modify the template code. These 2 documents provide rather intuitive explaination of what is the original source code trying to do. You can read them first before jumping into the source code.  
 1. mmwave_sdk_module_documentation  
 Located at mmwave_sdk<version>\docs. This document give links to documents of code of radar software. It includes the brief introductions for all functions and data structures. It also contains some detailed introductions of the mechanisms and workflow of demo and different modules.   
  
