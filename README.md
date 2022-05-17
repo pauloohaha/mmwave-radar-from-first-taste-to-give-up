@@ -18,4 +18,24 @@ When the HWA or the DSP are configurated correctly, they will start computations
 You should refer to *mmwave sdk user guide* and the *mmwave sdk module document* for detailed sequence and functions of each module.
 
 ## Principle of DSP system on mmwave radar  
-IWR6843 has a hardware accelerator (HWA) and a digital signal processor (DSP) on board. We need to know how does these 2 components work before diving into any DPU. 
+IWR6843 has a hardware accelerator (HWA) and a digital signal processor (DSP) on board. We need to know how does these 2 components work before diving into any DPU.  
+  
+Bellow I summerize some key information from [introduction to the DSP Subsystem in the IWR6843](https://www.ti.com/lit/pdf/swra621). 
+  
+### Overview
+Below is the basic structuer of DSP Sub-system (DSS) and expected role of each components. It contains a DSP and a HWA.  
+  
+The DSP is basically and processor specialized for large amount of computations, it is optimized for large throughput of data and has great parallelism.  
+  
+The HWA has much limited functions. It is mainly used to do FFT, log and CFAR computations. For example do FFTs on ADC sample to calculate range (the first FFT or 1D-FFT), doppler (the second FFT or 2D-FFT) and angle (the third FFT or 3D-FFT). After programmed properly, HWA can run indepently, without processor supervision, thus reduce the load of DSP significantly.  
+![图片](https://user-images.githubusercontent.com/85469000/168815921-02bae905-6ceb-4b39-91f4-133ce56bc48c.png)
+
+### HWA
+HWA has four local memories. Data can be brought into one local memory from external memory, processed by HWA, and output to another local memory. Noted that HWA can not read and write same local memory at the same time.  
+  
+Four local memory allow a special *Ping-Pong* operation. Since HWA need to read from and write to different local memories, HWA need two local memories to input and output at the same time. Meanwhile, the two other local memory can be used to output results to and get data from external memory. For example, HWA is inputing data from MEM0, writing results to MEM2, this input and output pair is called *Ping*. At the same time, MEM1 take data from external memory for next HWA computation, MEM3 output the result of last HWA computation, this input output pair is called *Pong*.
+
+![图片](https://user-images.githubusercontent.com/85469000/168817727-aa274abd-9420-4955-8b9f-82aa5f0c4845.png)
+
+
+
