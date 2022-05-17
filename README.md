@@ -16,3 +16,5 @@ When the HWA or the DSP are configurated correctly, they will start computations
 *mmwave sdk userguide P50*  
   
 You should refer to *mmwave sdk user guide* and the *mmwave sdk module document* for detailed sequence and functions of each module.
+
+## Genral Idea of Data Path
