@@ -8,9 +8,9 @@ IWR6843AOPEVM is an IWR6843 millimeterwave radar with Antenna-On-Package (AOP) E
 The radar system can be roughly seperated into 3 parts. RF part, data processing part and control.  
 RF part (Radar Sub-System RSS) is responsible for transmitting, receving and sampling of the RF signals. It generats a large amout of data, which then be processed by the data processing part. RF part can not be programmed by user, it can only be controlled by a few APIs provided.  
   
-The data processing part (DSP Sub-System DSS) need to transfer the ADC sample results into range and doppler informations for object detection. The ADC sample of received signal need to go through multiple computations, also called data processing units (DPUs), such as Range FFT, optinal Static Clutter Removal (which makes the radar only detect moving objects), Doppler FFT, CFAR (detect objects according to range and doppler signal) and Angle of Arrival (AoA) FFT. These computations goes one after another and form a data processing chain (DPC). The DPC is controlled by data path manager (DPM). Data processing part is user programmable.  
+The data processing part (DSP Sub-System DSS or C674x) need to transfer the ADC sample results into range and doppler informations for object detection. The ADC sample of received signal need to go through multiple computations, also called data processing units (DPUs), such as Range FFT, optinal Static Clutter Removal (which makes the radar only detect moving objects), Doppler FFT, CFAR (detect objects according to range and doppler signal) and Angle of Arrival (AoA) FFT. These computations goes one after another and form a data processing chain (DPC). The DPC is controlled by data path manager (DPM). Data processing part is user programmable.  
   
-The control layer (Master Sub-System MSS) is responsible for controlling other 2 layers, commnicating with extrnal devices and so on. The control layer can be programmed by user.  
+The control layer (Master Sub-System MSS or R4F) is responsible for controlling other 2 layers, commnicating with extrnal devices and so on. The control layer can be programmed by user.  
 
 For IWR6843AOP, which pocesses Hardware Accelerator and Digital Signal Processor, the data processing tasks can be done by these 2 components with little supervison from main processor.
 
