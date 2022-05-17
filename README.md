@@ -17,4 +17,5 @@ When the HWA or the DSP are configurated correctly, they will start computations
   
 You should refer to *mmwave sdk user guide* and the *mmwave sdk module document* for detailed sequence and functions of each module.
 
-## Genral Idea of Data Path
+## Principle of DSP system on mmwave radar  
+IWR6843 has a hardware accelerator (HWA) and a digital signal processor (DSP) on board. We need to know how does these 2 components work before diving into any DPU. 
