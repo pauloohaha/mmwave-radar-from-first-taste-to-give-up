@@ -1,7 +1,7 @@
 # Datapath
 
 ## Introduction
-In this branch, I will document mainly about the data processing part of the IWR6843AOP. I will introduce the architecture of the data processing in this document, and explain each dpu and its implementation in other documents. The documents provided by TI are quit intuitive, but I think an understanding from a different perspective will be helpful. 
+In this branch, I will document mainly about the data processing part of the IWR6843AOP. I will introduce the architecture of the data processing in this document, and explain each dpu and its implementation in other documents. The documents provided by TI are quit intuitive, but I think an understanding from a different perspective will be helpful.  
 All information below comes from:  
 1) [Introduction to the DSP Subsystem in the IWR6843](https://www.ti.com/lit/an/swra621/swra621.pdf)  
 2) [Enhanced Direct Memory Access (EDMA3) Controller](https://www.ti.com/lit/ug/sprugs5b/sprugs5b.pdf)  
@@ -56,12 +56,37 @@ You can refer to [Radar Hardware Accelerator User's Guide](http://www.ti.com/lit
 Data need to be intensivly transfered between local memory and external memory during HWA computation, these data transfers are done by EDMA. The purpose of EDMA is not only to transfer data, EDMA can also be used to do multidimensional transfer, chaining and linking multiple transfers.  
   
 EDMA controller mainly consist of channel controllers (CC) and multiple tanfer coontrollers (TC) for each CC. CC is responsible for scheduling data transfers, TC is responsible for performing actual data transfers. For IWR6843, it has 2 CCs, each with 2 TCs. Thus, 4 TCs in total, so 4 data transfers can be performed in parallel.
-![图片](https://user-images.githubusercontent.com/85469000/169446499-f7370280-de40-4908-a6b3-6cf43e8a9793.png)
+> ![图片](https://user-images.githubusercontent.com/85469000/169446499-f7370280-de40-4908-a6b3-6cf43e8a9793.png)
 > [Enhanced Direct Memory Access (EDMA3) Controller](https://www.ti.com/lit/ug/sprugs5b/sprugs5b.pdf)  
   
 EDMA engine is programmed by parameter RAMs (PaRAM) table. The PaRAM table contains multiple RaRAM sets. Each set define a DMA transfer, including the source and destination addresses, data pattern, linking, chaining and indexing. In radar, the EDMA is mainly used at:  
 (1) From the ADC Buffer into L3.  
 (2) From (or to) the L1/L2 DSP to (or from) the L3 or the HWA local memories.  
 (3) From (or to) the HWA local memories to (or from) the L3 or the DSP L1/L2 memories.  
-
-
+  
+**Multidimensional transfers**: The pattern of source data and destination data can be defined by three dimensions:  
+(1) First dimension (A transfer): define the smallest unit of data. The unit is defined by ACNT bytes contiguous array.  
+(2) Second dimension (B transfer): define a frame of data, consist of multiple arrats. The frame is defined by BCNT number of arrays, the start address of subsequent arrays are seperated by SRCBIDX (DSTBIDX) bytes.  
+(3) Third dimension (C transfer): define the pattern of frames. Transfer CCNT number of frames, the start address of subsequent frams are seperated by SRCCIDX (DSTCIDX) bytes.  
+All ACNT, BCNT, CCNT, SRCBIDX, DSTBIDX, SRCCIDX, SRCBIDX are defined in the PaRAM set.  
+  
+Examples:  
+![图片](https://user-images.githubusercontent.com/85469000/169450781-db375ca0-26ff-45c5-8aff-7633c945115f.png)
+The left array is the source data and right arrat is the destination data. The data can be understood as ADC samples of four RX antennas, the samples of each antenna are labeled by different colors. Thus, the samples of one RX antenna are stored in one row in source, in one column in destination. In latter range processing dpu, the source data pattern is called non-interleaving data pattern, and the destination data pattern is called interleaving data pattern.  
+  
+Our goal is to read and write data of one RX antenna continuously, thus we need to read a row in source and write a column in destination one by one, repeat four times.  
+  
+The coresponding setting of ACNT, BCNT, CCNT, SRCBIDX, etc. are showned in the botton of the diagram. Since each block consist of four bytes, so ACNT is 4, this valids for both source and destination. For source, we need to read one row continuously, thus we need to read the subsequent block in the same row, whose starting address is seperated by the width of the block (4 bytes), so SRCBIDX also equals to 4. There are 5 blocks in a row in total, thus the BCNT is set to 5. Since we need to read datas four all 4 RX antennas, we need to repeat four times, CCNT equals to 4. The starting addresses of different RX antenna data is seperated by the width of one row, which is 5 (blocks) x 4 (bytes/block) = 20 bytes. Thus, SRCCIDX is set to 20.
+  
+For the destination, things becomes more tricky. Since we need to read one column at a time. We do not need to access the subsequent block in the same row, we need to access the same block in the next row, the starting address of which is seperated by the width of the row (4 x 4 = 16 bytes). Thus, the DSTBIDX is 16. But there are still 5 blocks per antenna, thus BCNT is still 5. For next antenna, the datas are located in the next column, the starting addresses are only seperated by one block (4 bytes), thus DSTCIDX = 4.  
+  
+**Chaining** refer to the completion of one EDMA transfer to automatically trigger another EDMA transfer. This allow a sequence of DMA tranfers take place one after another without CPU intervention.  
+  
+**Linking** After completion of one PaRAM set, it can be loaded from another PaRAM. The 16-bit parameter LINK sepecify the offset that the PaRAM set should be reloaded. After reload, the PaRAM set can be triggered again.  
+  
+**Triggering** There 2 ways to trigger a EDMA channel:  
+(1) Event-based triggering  
+(2) Software triggering by the DSP CPU  
+(3) Chain triggering by a prior completed EDMA  
+  
+You can refer to [Introduction to the DSP Subsystem in the IWR6843](https://www.ti.com/lit/an/swra621/swra621.pdf) for more details about the DSP system of the IWR6843.
