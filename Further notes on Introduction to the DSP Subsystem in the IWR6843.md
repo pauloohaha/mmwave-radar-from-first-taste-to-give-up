@@ -31,3 +31,10 @@ During intra-frame period (active period), range FFT is performed. After all chi
 **Intraframe**: For each chirp, we need to do 4 256pt range-FFTs with windowing. According to table 3, this takes HWA 256*(4 + 1) + 1 = 1281 cycles ~= 6.4 us @200MHz. If this is done on DSP, a 256-point 16-bit FFT + 16-bit windowing takes 1.55 + 0.37 = 1.92us. For all 4 RX antennas, it takes 1.92 * 4 = 7.7us.  
   
 **Interframe**: During idle time, the 128pt doppler-FFT is done first for all 256 range-gates x 4 RX antennas. According to table 3, 4 x 128py FFT takes 3.2us, the subsequent 4 x 128pt log computation cost 2.6ms. The next CAFAR-CA on doppler dimension takes another 4 x ~0.8us. Thus in total 9.2us. Repeat 256 times takes 2.4ms.
+
+### Types of EDMA transfers
+We have discussed time used to do computations, now we discuss the time needed to do data transfers. There are 3 kinds of data transfers in FMCW radar:  
+  
+(1) Contiguous-Read Contiguous-Write: 128 bits per cycle => 4 samples per cycle (32-bit complex number, 16-bit I 16-bit Q).  
+(2) Contiguous-Read Transpose-Write: If one sample < 128 bits, 4 cycles per sample. Can be speeded up by using multiple channel to do data transfers simultaneously.  
+(3) Transpose-Read Contiguous-Write: If sample < 128 bits, 1 cycle per sample.
