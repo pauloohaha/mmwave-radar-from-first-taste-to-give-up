@@ -89,4 +89,4 @@ For the destination, things becomes more tricky. Since we need to read one colum
 (2) Software triggering by the DSP CPU  
 (3) Chain triggering by a prior completed EDMA  
   
-You can refer to [Introduction to the DSP Subsystem in the IWR6843](https://www.ti.com/lit/an/swra621/swra621.pdf) for more details about the DSP system of the IWR6843. Some of the further details are noted in ()
+You can refer to [Introduction to the DSP Subsystem in the IWR6843](https://www.ti.com/lit/an/swra621/swra621.pdf) for more details about the DSP system of the IWR6843. Some of the further details are noted in [Further Notes](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/f66af5eda00a5ab0f3cbe489a41df3ee5c79dc40/Further%20notes%20on%20Introduction%20to%20the%20DSP%20Subsystem%20in%20the%20IWR6843.md)
