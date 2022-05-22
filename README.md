@@ -42,4 +42,18 @@ v < pi * lambda / 4 * pi * T<sub>c</sub> ===> lambda / 4 * T<sub>c</sub>
 ## Velocity resolution 
 Suppose there are N chirps. Thus the phase difference accross N chirps need to be larger than 2 * pi.  
 w = 2 * N * v * T<sub>c</sub> * 2 * pi / lambda > 2 * pi  
-v < 2 * pi * lambda / 4 * N * pi * T<sub>c</sub> = lambda / 2 * N * pi * T<sub>c</sub>  
+v < 2 * pi * lambda / 4 * N * pi * T<sub>c</sub> = lambda / 2 * N * T<sub>c</sub>  
+  
+## Maximum Angle
+![图片](https://user-images.githubusercontent.com/85469000/169677086-ea6abc5e-e8ee-49bd-ab85-20f228f8784a.png)
+Let the  
+d be the distance be the spacing between antennas  
+w be the phase difference caused by angle  
+w = sin(sita) * d * 2 * pi / lambda < pi  
+sita < sin<sup>-1</sup>(lambda / 2 * d)  
+If the d is lambda / 2, the maximun angle will be +- 90<sup>o</sup>  
+
+## Angular resolution
+w = (sin(sita + delta sita) - sin(sita)) * N * d * 2 * pi / lambda > 2 * pi  
+w = cos(sita) * delta sita * N * d * 2 * pi / lambda > 2 * pi
+delta sita > lambda / N * d * cos(sita)
