@@ -76,3 +76,6 @@ In the each of 512 variation, following differs can be defined:
 • Idle time variable  
 • ADC start time variable  
 ![图片](https://user-images.githubusercontent.com/85469000/169678576-56c1ca47-c69f-474a-956a-ea09ae902f22.png)
+  
+Bellow are some detail definition of some parameters:
+![图片](https://user-images.githubusercontent.com/85469000/169678604-10224c28-6905-4cdf-b61b-364b0f2f01f2.png)
