@@ -55,4 +55,7 @@ Located at mmwave_sdk<version>\docs. This document give links to documents of co
 2. Template codes  
 The template codes are located in the test folder of different modules. These templates are much smaller and simpler than the demo code and are easier to track and follow. They demo the usage of module APIs or the working principle of the modules of interest.
 
-
+### Refernce to other useful materials
+Here I reference all other useful materials.  
+1. evm_setup_operational_modes.html  
+Located at mmwave_industrial_toolbox_<ver>\docs\hardware_guides. It includes how to set the hardware switches on the EVM module and MMWAVEICBOOST to set the radar EVM operate at stand alone mode or debug mode.
