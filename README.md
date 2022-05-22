@@ -27,3 +27,19 @@ T be the period of the chirp
 B be the sweep bandwidth of the chirp  
 |f1 \* T - f2 \* T| >= 1 to allow at least one period difference.  
 delta f > 1 / T ===> S * 2 * delta d / c > 1 / T ===> delta d > c / 2 * S * T ===> delta d > c / 2 * B
+  
+## Maximum velocity
+Let the  
+T<sub>c</sub> be the chirp seperation  
+v be the velocity of the object  
+lambda be the wavelength  
+w be the phase difference  
+w = 2 * v * T<sub>c</sub> * 2 * pi / lambda  
+v = w * lambda / 4 * pi * T<sub>c</sub>  
+since the phase difference cannot be larger than pi, otherwise the velocity will be unambiguous.  
+v < pi * lambda / 4 * pi * T<sub>c</sub> ===> lambda / 4 * T<sub>c</sub>  
+  
+## Velocity resolution 
+Suppose there are N chirps. Thus the phase difference accross N chirps need to be larger than 2 * pi.  
+w = 2 * N * v * T<sub>c</sub> * 2 * pi / lambda > 2 * pi  
+v < 2 * pi * lambda / 4 * N * pi * T<sub>c</sub> = lambda / 2 * N * pi * T<sub>c</sub>  
