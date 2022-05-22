@@ -1,11 +1,13 @@
-## RF components of Mmwave radar
+# RF components of Mmwave radar
 The RF part of the radar cannot be programmed directly by user. It can only be controlled by setting some parameters and call some APIs. Below I will describe the principle of some parameters in RF settings.  
   
 Source:  
 [Introduction to mmwave Sensing: FMCW Radars](https://training.ti.com/sites/default/files/docs/mmwaveSensing-FMCW-offlineviewing_0.pdf)  
 [Programming Chirp Parameters in TI Radar Devices](https://www.ti.com/lit/pdf/swra553)  
+  
+## Chirp parameters
 
-## Maximum range  
+### Maximum range  
 The EM wave need to travel from radar to the object and back to radar. If the time needed for the travel is longer than the chirp, the object cannot be detected. Let the   
 IF<sub>MAX</sub> be bandwidth of the IF signal  
 c be the speed of the light  
@@ -14,7 +16,7 @@ d<sub>MAX</sub> be the maximum distance of the object
 The time period of the chirp is IF<sub>MAX</sub>/S. The time needed for the travel is 2\*d<sub>MAX</sub>/c. Thus 2\*d<sub>MAX</sub>/c < IF<sub>MAX</sub>/S, d<sub>MAX</sub> < c\*IF<sub>MAX</sub>/2\*S  
 If the SNR is also considered, the formula is expressed in P3 of [Programming Chirp Parameters in TI Radar Devices](https://www.ti.com/lit/pdf/swra553) 
   
-## Range resolution
+### Range resolution
 For easier resolution during range FFT, the IF signal for two objects need to have at least one period difference.  
 >![图片](https://user-images.githubusercontent.com/85469000/169676410-13e1797d-bff3-4acd-b702-dc07cb850f40.png)
 >[Introduction to mmwave Sensing: FMCW Radars](https://training.ti.com/sites/default/files/docs/mmwaveSensing-FMCW-offlineviewing_0.pdf) 
@@ -28,7 +30,7 @@ B be the sweep bandwidth of the chirp
 |f1 \* T - f2 \* T| >= 1 to allow at least one period difference.  
 delta f > 1 / T ===> S * 2 * delta d / c > 1 / T ===> delta d > c / 2 * S * T ===> delta d > c / 2 * B
   
-## Maximum velocity
+### Maximum velocity
 Let the  
 T<sub>c</sub> be the chirp seperation  
 v be the velocity of the object  
@@ -39,12 +41,12 @@ v = w * lambda / 4 * pi * T<sub>c</sub>
 since the phase difference cannot be larger than pi, otherwise the velocity will be unambiguous.  
 v < pi * lambda / 4 * pi * T<sub>c</sub> ===> lambda / 4 * T<sub>c</sub>  
   
-## Velocity resolution 
+### Velocity resolution 
 Suppose there are N chirps. Thus the phase difference accross N chirps need to be larger than 2 * pi.  
 w = 2 * N * v * T<sub>c</sub> * 2 * pi / lambda > 2 * pi  
 v < 2 * pi * lambda / 4 * N * pi * T<sub>c</sub> = lambda / 2 * N * T<sub>c</sub>  
   
-## Maximum Angle
+### Maximum Angle
 ![图片](https://user-images.githubusercontent.com/85469000/169677086-ea6abc5e-e8ee-49bd-ab85-20f228f8784a.png)
 Let the  
 d be the distance be the spacing between antennas  
@@ -53,7 +55,24 @@ w = sin(sita) * d * 2 * pi / lambda < pi
 sita < sin<sup>-1</sup>(lambda / 2 * d)  
 If the d is lambda / 2, the maximun angle will be +- 90<sup>o</sup>  
 
-## Angular resolution
+### Angular resolution
 w = (sin(sita + delta sita) - sin(sita)) * N * d * 2 * pi / lambda > 2 * pi  
 w = cos(sita) * delta sita * N * d * 2 * pi / lambda > 2 * pi
 delta sita > lambda / N * d * cos(sita)
+  
+## Configurable Chirp RAM and Chirp Profiles
+Mmwave radar by TI define the chirp by 4 chirp profiles and 512 variation on the top of these profiles. The variation are indexed and can be selectively looped.  
+  
+In each of 4 chirp profiles, following parameters can be defined:  
+• Start frequency  
+• Frequency slope  
+• Idle time  
+• ADC start time  
+• Ramp end time  
+  
+In the each of 512 variation, following differs can be defined:
+• Start frequency variable  
+• Frequency slope variable  
+• Idle time variable  
+• ADC start time variable  
+![图片](https://user-images.githubusercontent.com/85469000/169678576-56c1ca47-c69f-474a-956a-ea09ae902f22.png)
