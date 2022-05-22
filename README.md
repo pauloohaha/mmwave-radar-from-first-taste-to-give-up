@@ -20,9 +20,9 @@ For easier resolution during range FFT, the IF signal for two objects need to ha
 >[Introduction to mmwave Sensing: FMCW Radars](https://training.ti.com/sites/default/files/docs/mmwaveSensing-FMCW-offlineviewing_0.pdf) 
   
 Let the  
-f1 and f2 be the IF signal frequence of two objects
-delta f = |f1 - f2|
-delta d be the distance difference between 2 objects
+f1 and f2 be the IF signal frequence of two objects  
+delta f = |f1 - f2|  
+delta d be the distance difference between 2 objects  
 T be the period of the chirp  
 B be the sweep bandwidth of the chirp  
 |f1 \* T - f2 \* T| >= 1 to allow at least one period difference.  
