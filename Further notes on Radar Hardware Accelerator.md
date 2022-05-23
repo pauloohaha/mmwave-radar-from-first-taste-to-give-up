@@ -49,7 +49,23 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   
   The trigger mode is set to immediate. Thus, once the previous dummy parameter set is finished, this ping parameter set start execution right away. The acceleration mode is set to compute FFT.  
   
-  From line 894 to line 907, the code configure the input formatter of the HWA:
-  >![图片](https://user-images.githubusercontent.com/85469000/169744588-42cf1812-bf37-456d-bf01-3b4f979a0c50.png)
+### Input formatter
+  Input formatter is used to access the datas in local MEMs, format and feed them into core computation unit. If can feed one complex sample per cycle. From line 894 to line 907, the code configure the input formatter of the HWA:
 
+  Let's look at each setting in the test code:
+  
+  ![图片](https://user-images.githubusercontent.com/85469000/169749584-5e1b89f0-eef3-4f24-a356-d91624aae126.png)
+  • Line 894 srcAddr: 0x0000 corresponds to the first memory location of ACCEL_MEM0 memory. srcAddr is defined in main() and passed to Test_initTask(), it is defined as a absolut address, thus need to subtract the SOC_HWA_MEM0 to get the absolut address w.r.t MEM0.
+  >![图片](https://user-images.githubusercontent.com/85469000/169749369-9cff0c4c-3a98-4950-87f2-4a681250b5db.png)
+  
+  • Line 895 to 898 Acnt, Aidx, Bcnt, Bidx: Define the access pattern of the samples. Similar but not identical to the [EDMA access control](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/Datapath/README.md#enhanced-dma-edma). Here, the sample size is defined by other parameters. A and B are two dimension of the data array, in which A can be understood as row and B can be understood as column. Acnt define how many elements are there in a row and Aidx define how many bytes seperate 2 consequtive elements in a row. Bcnt define the number of rows and Bidx define the seperation between the starting address of two rows.
+  >![图片](https://user-images.githubusercontent.com/85469000/169750305-97cca17b-b6dc-419d-8e38-717b1786fdb0.png)
 
+  In the test code, there are HWA_TEST_NUM_RX_ANT = 4 antennas and each antenna has HWA_TEST_NUM_SAMPLES = 225 samples. The input data is arranged in interleaved mode, which means the datas for one RX antenna are located in one column. For examples, the 225 samples for RX0 are stored in array[0][0], array[1][0], array[2][0] ... array[224][0], the 225 samples for RX1 are stored in array[0][1], array[1][1], array[2][1] ... array[224][1]. Since HWA need to read datas for one RX antenna consequtively. Thus we need to access one column consequtively.
+  
+  >![图片](https://user-images.githubusercontent.com/85469000/169749664-1f631f33-9584-46ba-87ef-2aa810cffaff.png)
+    
+  Acnt is set to HWA_TEST_NUM_SAMPLES - 1, indicate the number of samples for one RX antenna.  
+  AIdx is set to HWA_TEST_NUM_RX_ANT * HWA_TEST_COMPLEX_16BIT_SIZE, define the length of a row, which is the seperation between two consequtive data for one RX antenna.
+  Bcnt is set to HWA_TEST_NUM_RX_ANT - 1, indicate the number of RX antennas.
+  BIdx is set to HWA_TEST_COMPLEX_16BIT_SIZE, which is seperation between array[0][0] (the starting address of RX Ant 0), array[0][1] (the starting address of RX Ant 1), array[0][2] and array[0][3].
