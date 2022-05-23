@@ -4,6 +4,7 @@ The RF part of the radar cannot be programmed directly by user. It can only be c
 Source:  
 [Introduction to mmwave Sensing: FMCW Radars](https://training.ti.com/sites/default/files/docs/mmwaveSensing-FMCW-offlineviewing_0.pdf)  
 [Programming Chirp Parameters in TI Radar Devices](https://www.ti.com/lit/pdf/swra553)  
+[video training](https://training.ti.com/mmwave-training-series)
   
 ## Chirp parameters
 
