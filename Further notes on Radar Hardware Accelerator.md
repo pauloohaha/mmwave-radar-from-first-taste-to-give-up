@@ -64,6 +64,7 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   In the test code, there are HWA_TEST_NUM_RX_ANT = 4 antennas and each antenna has HWA_TEST_NUM_SAMPLES = 225 samples. The input data is arranged in interleaved mode, which means the datas for one RX antenna are located in one column. For examples, the 225 samples for RX0 are stored in array[0][0], array[1][0], array[2][0] ... array[224][0], the 225 samples for RX1 are stored in array[0][1], array[1][1], array[2][1] ... array[224][1]. Since HWA need to read datas for one RX antenna consequtively. Thus we need to access one column consequtively.
   
   >![图片](https://user-images.githubusercontent.com/85469000/169749664-1f631f33-9584-46ba-87ef-2aa810cffaff.png)
+  > Some numbers in this figure is not identical to the numbers in the test code, but the data pattern is same and should be helpful for understanding
     
   Acnt is set to HWA_TEST_NUM_SAMPLES - 1, indicate the number of samples for one RX antenna.  
   AIdx is set to HWA_TEST_NUM_RX_ANT * HWA_TEST_COMPLEX_16BIT_SIZE, define the length of a row, which is the seperation between two consequtive data for one RX antenna.
