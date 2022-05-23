@@ -132,3 +132,20 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   The window coefficient *win_data225* is defined in *fft_window.h*:  
   >![图片](https://user-images.githubusercontent.com/85469000/169827852-52182995-a52b-42d3-9892-56e9c72beae2.png)
 
+### Done interrupt
+  These code set an interrupt for the HWA done. From my understanding, a the variable *doneSemCmp* is used to signal the main processor the HWA is done. A register bit refenced by the *doneSemCmp* is 0 by default. When the HWA finishes, it call the user function *HWA_Test_DoneISR_Callback()*.
+  >![图片](https://user-images.githubusercontent.com/85469000/169832546-0e01bdb3-0d98-4791-99a7-fa4bbbdeb40b.png)
+  
+  The user function *HWA_Test_DoneISR_Callback()* call the *SemaphoreP_post(semHandle)*, which set the register bit refernced by the *doneSemCmp*.
+  >![图片](https://user-images.githubusercontent.com/85469000/169833297-88f6c7f6-5cfe-45f1-b119-6b2db6685bde.png)
+  
+  Later, after all the configurations are finished and HWA is triggered, the code call **SemaphoreP_pend(doneSemCmp, BIOS_WAIT_FOREVER)**, which stall the program and wait for the semaphore to signal that HWA is done.
+  >![图片](https://user-images.githubusercontent.com/85469000/169833607-e63e320d-b82f-4caa-a864-ea9ae9071d91.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/169833706-80e2fe35-4f9e-4a1b-ba25-0665b47cef91.png)
+  
+### Common registers
+  
+  • Line 637 call the function commonConfig():
+  >![图片](https://user-images.githubusercontent.com/85469000/169833995-f094b061-52d7-4c47-ab0b-2fb037d2270b.png)
+
+
