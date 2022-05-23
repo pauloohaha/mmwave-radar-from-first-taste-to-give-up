@@ -147,5 +147,21 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   
   • Line 637 call the function commonConfig():
   >![图片](https://user-images.githubusercontent.com/85469000/169833995-f094b061-52d7-4c47-ab0b-2fb037d2270b.png)
+  
+#### commonConfig
+  
+  • Line 1145 set the *configMask*. Only these values are valid when calling HWA_configCommon(). Thus, only the marco for values that are defined below are included
+  >![图片](https://user-images.githubusercontent.com/85469000/169837223-8e14bcaa-b619-4bad-ac42-f244c8383805.png)
+
+  • Line 1155 define *numLoops*. Thus value sepecify how many time the HWA loop through the parameter sets between paramStartIdx and paramStopIdx. The maximum value is 4094. The value 4095 (0xFFF) means infinite loops.
+  
+  • Line 1156 and 1157 define the starting idx and ending idx for parameter sets that the HWA loop through.
+  
+  • Line 1158 define *fft1DEnable*. The value specify whether the MEM0 and MEM1 are shared with ADC front end as ADC buffer. In this test code, the ADC sample is write to MEM0 manually, thus set to disabled.
+  
+  • Line 1159 define *interferenceThreshold*. This is the threshold value for the preprocessing. When there are other mmwave device nearby, some times there are some sample is unreasonably high. The samples' magnitudes are approximatly calculated, all samples that larger than the threshold are set to 0, or so called zero-out, in both real and imaginary part. 0xFFFFFF means the function is disabled, since any sampled value cannot larger than it.
+  
+  • Line 1174 call the HWA_configCommon() to configurate the common registers.
+  >![图片](https://user-images.githubusercontent.com/85469000/169839218-bb3dd496-2ce5-4da9-9627-04c0017121af.png)
 
 
