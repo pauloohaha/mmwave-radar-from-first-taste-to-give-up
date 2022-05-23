@@ -59,8 +59,8 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   >![图片](https://user-images.githubusercontent.com/85469000/169749369-9cff0c4c-3a98-4950-87f2-4a681250b5db.png)
   
   • Line 895 to 898 Acnt, Aidx, Bcnt, Bidx: Define the access pattern of the samples. Similar but not identical to the [EDMA access control](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/Datapath/README.md#enhanced-dma-edma). Here, the sample size is defined by other parameters. A and B are two dimension of the data array, in which A can be understood as row and B can be understood as column. Acnt define how many elements are there in a row and Aidx define how many bytes seperate 2 consequtive elements in a row. Bcnt define the number of rows and Bidx define the seperation between the starting address of two rows.
-  >![图片](https://user-images.githubusercontent.com/85469000/169750305-97cca17b-b6dc-419d-8e38-717b1786fdb0.png)
-
+  >![图片](https://user-images.githubusercontent.com/85469000/169753751-9e077eb2-f718-4783-8ec5-35d4ecec9a06.png)
+  
   In the test code, there are HWA_TEST_NUM_RX_ANT = 4 antennas and each antenna has HWA_TEST_NUM_SAMPLES = 225 samples. The input data is arranged in interleaved mode, which means the datas for one RX antenna are located in one column. For examples, the 225 samples for RX0 are stored in array[0][0], array[1][0], array[2][0] ... array[224][0], the 225 samples for RX1 are stored in array[0][1], array[1][1], array[2][1] ... array[224][1]. Since HWA need to read datas for one RX antenna consequtively. Thus we need to access one column consequtively.
   
   >![图片](https://user-images.githubusercontent.com/85469000/169749664-1f631f33-9584-46ba-87ef-2aa810cffaff.png)
