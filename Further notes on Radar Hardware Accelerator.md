@@ -4,6 +4,7 @@ In this document, I will introduce the programming of the radar, combining the t
 ## Code explaination
 All the code below are from mmwave_sdk_<ver>\packages\ti\drivers\hwa\test\common\main.c  
   
+### main
 Like every C code, the test code start at main():
   >main()
   ![图片](https://user-images.githubusercontent.com/85469000/169736204-3380766f-d491-4bab-a326-5a0b25136f92.png)
@@ -12,6 +13,7 @@ The main() initialize the SOC and start a task to execute Test_initTask(). This 
   > Test_initTask()  
   ![图片](https://user-images.githubusercontent.com/85469000/169736399-e1bef63f-5c23-487e-98da-1fd1ba2bd02a.png)
   
+### Initialize and open the HWA
 In Test_initTask(), the first step is to initialize the HWA through HWA_init(). 
   >![图片](https://user-images.githubusercontent.com/85469000/169736556-a1c1f70c-5c2e-4966-947f-7a3a4db42d0e.png)
   
@@ -21,18 +23,33 @@ From line 281 to line 302, the code shut down and reopen the HWA in an intuitive
   
   >![图片](https://user-images.githubusercontent.com/85469000/169737225-9244ea3e-f9d5-4d8b-b1da-a9a47e6e722d.png)
   
+### configure the HWA
 Now starts the actual part of the testing. The code first call the function configParamSetFFT(), which include configurating all the input formatter, output formatter, acceleration mode and so on. Let's look into it.
   >configParamSetFFT()
   >![图片](https://user-images.githubusercontent.com/85469000/169737125-5bf6ca79-187a-4225-a2c5-777c0a2e7e8d.png)
-  >![图片](https://user-images.githubusercontent.com/85469000/169741326-edb53345-f06a-4467-b63c-5f361487617d.png)
   
   gHWATestParamConfig is an array of 16 HWA_ParamConfig. Used to configure the 16 parameter sets.  
+  >![图片](https://user-images.githubusercontent.com/85469000/169741326-edb53345-f06a-4467-b63c-5f361487617d.png)
   
+### Dummy parameter set
   From line 876 to 879, the code configure the first parameter set, which is a dummy parameter set. It is triggered by software and trigger the next ping parameter.  
   
   Line 876 configure the trigger mode of the parameter set. There are 4 possible trigger modes:  
   • Immediate trigger (TRIGMODE = 000b): The state machine starts execution immediatly, does not wait for anything.  
   • Wait for processor-based software trigger (TRIGMODE = 001b):  This is used when the main processor needs to control the HWA directly. In this mode, the HWA monitor a bit in CR42ACCTRIG register. The bit is 0 by default, once it is set to 1 by the main processor, the HWA clear it and start execution.  
   • Wait for ADC buffer ping-to-pong or pong-to-ping switch (TRIG_MODE = 010b): In IWR6843AOP, the ADC buffered is shared with HWA local memory MEM0 and MEM1. ADC can be configured to switch from Ping-to-Pong or Pong-to-Ping. From my understanding, ADC can be switch from *writing to ADC buffer shared with MEM0 while HWA is reading from ADC buffer shared with MEM1* to *writing to ADC buffer shared with MEM1 and HWA is reading from ADC buffer shared with MEM0*. When this switching take place, it means the previos ADC buffer writing is completed, and HWA can start to read from the coresponding ADC buffer and start excution. Thus the HWA can be triggered by this switching. Noted that the HWA needs to ensure that the reading must be done before the next switching.  
-  • Wait for the DMA-based trigger (TRIGMODE = 011b): In this mode, HWA is triggered when one of 16 DMA transfers related to HWA is finished. This DMA transfer is specified by DMA2ACC_CHANNEL_TRIGSRC register. When the DMA transfer is finished, the coresponding bit in DMA2ACCTRIG will be set, once this bit is set, the HWA is triggered.
+  • Wait for the DMA-based trigger (TRIGMODE = 011b): In this mode, HWA is triggered when one of 16 DMA transfer channels related to HWA is finished. This DMA transfer is specified by DMA2ACC_CHANNEL_TRIGSRC register. When the DMA transfer is finished, the coresponding bit in DMA2ACCTRIG will be set, once this bit is set, the HWA is triggered.  
+    
+In this test code, the trigger mode is selected to DMA-based trigger, and the channel is selected to HWA_TEST_SRC_TRIGGER_DMACH0. Later in main(), the HWA is triggered by manually setting the corresponding channel's bit:
+  >![图片](https://user-images.githubusercontent.com/85469000/169743693-817b22f1-e8e1-448d-aa8e-909df8ff0d43.png)
   
+### Ping parameter set
+  From line 890 to 928, the code configure the Ping parameter set. Line 892 and 893 configure the trigger mode and acceleration mode of this parameter set:
+  >![图片](https://user-images.githubusercontent.com/85469000/169744201-c4b433b1-922a-4030-a220-579437e628b2.png)
+  
+  The trigger mode is set to immediate. Thus, once the previous dummy parameter set is finished, this ping parameter set start execution right away. The acceleration mode is set to compute FFT.  
+  
+  From line 894 to line 907, the code configure the input formatter of the HWA:
+  >![图片](https://user-images.githubusercontent.com/85469000/169744588-42cf1812-bf37-456d-bf01-3b4f979a0c50.png)
+
+
