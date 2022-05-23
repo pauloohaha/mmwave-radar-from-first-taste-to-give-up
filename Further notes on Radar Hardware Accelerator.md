@@ -104,6 +104,13 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   When enabled, the HWA will multiple the input samples with Acnt number of real coefficients in a dedicated Window RAM.In window RAM, there are 1024 18-bit, signed, 2's-complement coefficient, the windowStart specify from which coefficient will the current iteration multiply. If the coefficient is symmetirc, winSymm can be enabled, thus only half of the coefficients need to be stored in the window RAM.
   >![图片](https://user-images.githubusercontent.com/85469000/169762239-0c6662d8-aff8-47ce-88a1-5fc29e9e60a9.png)
 
+  • Line 919 to 921 specify some FFT settings.  
+  >![图片](https://user-images.githubusercontent.com/85469000/169763396-d098e810-a63e-4f8f-89e1-4d349c683cfd.png)
   
+  The FFT size must be a power of 2, such as 2, 4, 8, 16 .. 512 and 1024 are supported. fftSize is set to the log(2) of the FFT size. If the Acnt is less than the FFT size, the HWA will automatically paddel zeros after input. E.g. srcAcnt = 99, then fftsize is set to 7 (FFT size = 2^7 = 128), input formatter automatically apends 28 (128 - 99) zeros.  
+  
+  Other settings are less importent, you can refer to [Radar Hardware Accelerator](https://www.ti.com/lit/swru526) for more details.
+  
+
   
   
