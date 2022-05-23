@@ -50,6 +50,7 @@ The **input and output formattor** interface between the input (or output) data 
 The **State Machine**  is responsible for controlling the HWA. It can chain and loop through a sequence of parameter sets one after another. The state machine has 2 kinds of registers, (1) parameter-set memories (responsible for controlling the computation) and (2) static register (responsible for controlling the execution of parameter-set defined operations). The parameter-set memory can specify (1) which kind of operation, (2) input and output data format, (3) number of iterations this parameter set is executed, (4) the condition which trigger the execution or stalled until. The static registers define the pattern of parameter-set is executed.
 
 You can refer to [Radar Hardware Accelerator User's Guide](http://www.ti.com/lit/pdf/SWRU526) for more details.  
+I also cover the test code provided by TI and some key points in [Radar Hardware Accelerator User's Guide](http://www.ti.com/lit/pdf/SWRU526) in [Further notes on Radar Hardware Accelerator](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/Datapath/Further%20notes%20on%20Radar%20Hardware%20Accelerator.md#radar-hardware-accelerator)
   
 ### Enhanced-DMA (EDMA)
   
