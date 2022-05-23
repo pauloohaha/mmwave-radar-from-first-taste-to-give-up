@@ -1,4 +1,4 @@
-# Learining Guide
+# Learining Guide and reference
 
 ## Introduction
 This document is intended for someone who just started to learn the usage of millimeter wave radar from TI, but has no idea where to start and which document to read. I will try my best to use plain English to introduce the mmwave radar concisly. Then I will brief you though some important documents that I think is essential before further learning.  
