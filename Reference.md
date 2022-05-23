@@ -62,3 +62,6 @@ Located at mmwave_industrial_toolbox_<ver>\docs\hardware_guides. It includes how
   
 2. [Programming Chirp Parameters in TI Radar Devices](https://www.ti.com/lit/pdf/swra553)  
 This document describes how to set the chirp parameters in details.
+  
+3. [Radar Hardware Accelerator](https://www.ti.com/lit/swru526)  
+This document introduce the hardware accelerator in details.
