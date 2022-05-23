@@ -69,3 +69,16 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   AIdx is set to HWA_TEST_NUM_RX_ANT * HWA_TEST_COMPLEX_16BIT_SIZE, define the length of a row, which is the seperation between two consequtive data for one RX antenna.
   Bcnt is set to HWA_TEST_NUM_RX_ANT - 1, indicate the number of RX antennas.
   BIdx is set to HWA_TEST_COMPLEX_16BIT_SIZE, which is seperation between array[0][0] (the starting address of RX Ant 0), array[0][1] (the starting address of RX Ant 1), array[0][2] and array[0][3].
+  
+  >![图片](https://user-images.githubusercontent.com/85469000/169752313-579b55ae-7947-40e7-8772-653922a62ced.png)
+  
+  • Line 901 to 905 define the formatting of the data. In this test code, the input datas are signed complex 16-bit (for each I and Q) data. Thus srcRealComplex is set to 0 (0 for complex, 1 for real), srcWidth is set to 0 (o for 16-bit 1 for 32-bit), srcSign is set to 1 (1 for signed, 0 for unsigned), srcConjugate is set to 0 (0 for disabled).
+  
+  Since the ADC sample data is either 16-bit or 32-bit (for each I and Q) wide, but the input data to HWA can only be 24-bit wide. Thus we need to paddle some zero for 16-bit data and drop some bits for 32-bit data. When input is 16-bit wide, the srcScale specif how many bits are added at MSB. Here, srcScale is set to 8 means the data are extended to 24-bit by paddeling 8 bits at MSB.
+  >![图片](https://user-images.githubusercontent.com/85469000/169753010-24e9e5e6-410b-4db5-9f6c-0c9b8cc17f4e.png)
+
+  >![图片](https://user-images.githubusercontent.com/85469000/169753431-3b08f934-68bc-4443-a300-3351cba73ad3.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/169753478-9e9ea77d-79e5-4713-8b61-26954b906575.png)
+  
+  • Line 899, 900, 906 and 907 are not relevant in this test code, all are set to 0.
+
