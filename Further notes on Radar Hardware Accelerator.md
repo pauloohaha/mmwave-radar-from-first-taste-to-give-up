@@ -49,7 +49,7 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   
   The trigger mode is set to immediate. Thus, once the previous dummy parameter set is finished, this ping parameter set start execution right away. The acceleration mode is set to compute FFT.  
   
-### Input formatter
+#### Input formatter
   Input formatter is used to access the datas in local MEMs, format and feed them into core computation unit. If can feed one complex sample per cycle. From line 894 to line 907, the code configure the input formatter of the HWA:
 
   Let's look at each setting in the test code:
@@ -83,7 +83,7 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   
   • Line 899, 900, 906 and 907 are not relevant in this test code, all are set to 0.
 
-### Output formatter
+#### Output formatter
   >![图片](https://user-images.githubusercontent.com/85469000/169755768-6c7fa145-5c64-460f-844c-8feed3280fda.png)
   
   Similar to input formatter, the output formatter also can write datas in flexible pattern. dstAddr, dstAcnt, dstIdx, dstBIdx are similar to src, **dstBcnt is common to srcBcnt**.
@@ -93,7 +93,7 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   
   At dstAcnt does not need to be same with srcAcnt. It can be smaller than srcAcnt, thus some of the outputs at the end will be dropped. If some outputs at the beginning need to be dropped, you can set the dstSkipInit. The total number of output is (DSTACNT + 1) – REG_DST_SKIP_INIT.
 
-### Core computation unit
+#### Core computation unit
   
   • Line 918 select the function of HWA to be FFT  
   ![图片](https://user-images.githubusercontent.com/85469000/169761643-55fc6b61-11f7-4aae-8b99-6016cbc8cd11.png)
@@ -111,6 +111,24 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   
   Other settings are less importent, you can refer to [Radar Hardware Accelerator](https://www.ti.com/lit/swru526) for more details.
   
+  • Line 930 configurate the HWA.
+  >![图片](https://user-images.githubusercontent.com/85469000/169826212-6237c36d-6bdb-4d21-90c5-59f3119c70f3.png)
 
+### Dummy parameter set for Pong parameter set
+  Similar to Ping dummy parameter set. But the trigger channel is changed from HWA_TEST_SRC_TRIGGER_DMACH0 to HWA_TEST_SRC_TRIGGER_DMACH1.
+  ![图片](https://user-images.githubusercontent.com/85469000/169826492-52394f05-a06e-45b3-b0c7-64ef37d048d7.png)
+
+### Pong parameter set
+  The pong parameter set is almost identical to ping parameter set. For this test code, only the destination address is different. dstAddr is SOC_HWA_MEM2.
+  ![图片](https://user-images.githubusercontent.com/85469000/169826747-ce559985-fd16-49ad-91bb-46a8fd50245b.png)
+
+### Window coefficient fonfiguration
+  • Line 325
+  >![图片](https://user-images.githubusercontent.com/85469000/169827447-e97f9665-0799-469c-bdd4-b87e04ee99d9.png)  
   
+  The prototype of the HWA_configRam() is:  
+  >![图片](https://user-images.githubusercontent.com/85469000/169827614-eaa3200d-2436-4acb-825e-31e8d60820c9.png)
   
+  The window coefficient *win_data225* is defined in *fft_window.h*:  
+  >![图片](https://user-images.githubusercontent.com/85469000/169827852-52182995-a52b-42d3-9892-56e9c72beae2.png)
+
