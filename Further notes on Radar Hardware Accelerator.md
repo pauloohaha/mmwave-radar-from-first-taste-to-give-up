@@ -83,3 +83,27 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   
   • Line 899, 900, 906 and 907 are not relevant in this test code, all are set to 0.
 
+### Output formatter
+  >![图片](https://user-images.githubusercontent.com/85469000/169755768-6c7fa145-5c64-460f-844c-8feed3280fda.png)
+  
+  Similar to input formatter, the output formatter also can write datas in flexible pattern. dstAddr, dstAcnt, dstIdx, dstBIdx are similar to src, **dstBcnt is common to srcBcnt**.
+  
+  Othough the output of core computation unit is 24-bit wide, it can be cut or expand to 16-bit or 32-bit by setting dstWidth to 1 or 0 respectively. The cutting or expanding is similar to src. For 16-bit output, dstScale bits will be dropped at LSB.
+  >![图片](https://user-images.githubusercontent.com/85469000/169756388-26fb0a37-8ef4-4601-82a3-2c3a2b5e6418.png)
+  
+  At dstAcnt does not need to be same with srcAcnt. It can be smaller than srcAcnt, thus some of the outputs at the end will be dropped. If some outputs at the beginning need to be dropped, you can set the dstSkipInit. The total number of output is (DSTACNT + 1) – REG_DST_SKIP_INIT.
+
+### Core computation unit
+  
+  • Line 918 select the function of HWA to be FFT  
+  ![图片](https://user-images.githubusercontent.com/85469000/169761643-55fc6b61-11f7-4aae-8b99-6016cbc8cd11.png)
+  
+  • Line 922 to 925 set the windowing function of FFT.  
+  >![图片](https://user-images.githubusercontent.com/85469000/169761763-5ba5914c-f799-4d5b-87b7-0092a4c30ca6.png)  
+  
+  When enabled, the HWA will multiple the input samples with Acnt number of real coefficients in a dedicated Window RAM.In window RAM, there are 1024 18-bit, signed, 2's-complement coefficient, the windowStart specify from which coefficient will the current iteration multiply. If the coefficient is symmetirc, winSymm can be enabled, thus only half of the coefficients need to be stored in the window RAM.
+  >![图片](https://user-images.githubusercontent.com/85469000/169762239-0c6662d8-aff8-47ce-88a1-5fc29e9e60a9.png)
+
+  
+  
+  
