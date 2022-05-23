@@ -19,7 +19,7 @@ Then get a HWA handle from HWA_open(). This handle works like a reference to the
   
 From line 281 to line 302, the code shut down and reopen the HWA in an intuitive way.  
   
-  >![图片](https://user-images.githubusercontent.com/85469000/169736968-8c0683d3-5e39-446b-a97f-5356d553a4c1.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/169737225-9244ea3e-f9d5-4d8b-b1da-a9a47e6e722d.png)
   
 Now starts the actual part of the testing. The code first call the function configParamSetFFT(), which include configurating all the input formatter, output formatter, acceleration mode and so on. Let's look into it.
   >configParamSetFFT
