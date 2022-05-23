@@ -164,4 +164,42 @@ In this test code, the trigger mode is selected to DMA-based trigger, and the ch
   • Line 1174 call the HWA_configCommon() to configurate the common registers.
   >![图片](https://user-images.githubusercontent.com/85469000/169839218-bb3dd496-2ce5-4da9-9627-04c0017121af.png)
 
+### Enable and reset
+  
+  The HWA is then enabled and reset:
+  >![图片](https://user-images.githubusercontent.com/85469000/169839507-7f998ff8-7942-484a-8e0f-4ddd9564175e.png)
+
+### Prepare the input and reset the output
+  
+  The test code then copy the *gHWATest_cmp_input* to the MEM0. Then set memory needed to write the result in MEM2 to 0.
+  >![图片](https://user-images.githubusercontent.com/85469000/169840640-4ab15988-fbdf-4584-92da-d8000f04e8f8.png)
+  
+  *gHWATest_cmp_input* is defined in cmp_in.h:
+  >![图片](https://user-images.githubusercontent.com/85469000/169840900-92bafd6a-739e-4177-ae51-3b1627f24078.png)
+
+### Trigger the HWA
+  
+  The HWA is triggered manually.
+  >![图片](https://user-images.githubusercontent.com/85469000/169841069-17e2cb47-2ea5-4643-bbc1-95acda2d016b.png)
+
+### Wait for HWA
+  
+  Wait until the HWA signal the semaphore:
+  >![图片](https://user-images.githubusercontent.com/85469000/169841238-abd40502-e5cb-413a-8c41-8b4274345b6a.png)
+  
+### Verify the result
+  
+  >![图片](https://user-images.githubusercontent.com/85469000/169841366-a05a530f-7d6e-4e9c-850b-4becc8110095.png)
+  
+### Clean up
+  
+  disable:  
+  *HWA_disableParamSetInterrupt* (not used in this test code)  
+  *HWA_disableDoneInterrupt*  
+  *HWA_enable* (use 0 to disable)  
+  *SemaphoreP_delete*  
+  *HWA_close*  
+  >![图片](https://user-images.githubusercontent.com/85469000/169841514-8a44e25b-f77d-4694-857b-0d18d12db406.png)
+
+
 
