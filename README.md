@@ -52,7 +52,7 @@ The **State Machine**  is responsible for controlling the HWA. It can chain and 
 You can refer to [Radar Hardware Accelerator User's Guide](http://www.ti.com/lit/pdf/SWRU526) for more details.  
 I also cover the test code provided by TI and some key points in [Radar Hardware Accelerator User's Guide](http://www.ti.com/lit/pdf/SWRU526) in [Further notes on Radar Hardware Accelerator](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/Datapath/Further%20notes%20on%20Radar%20Hardware%20Accelerator.md#radar-hardware-accelerator). I will summarize the code as follow:  
   
-  For HWA:  
+  For HWA, the procedure of controlling HWA is as follow:  
   • **HWA_init()**  
   • get a *handle* = **HWA_open()**  
   • configurate a parameter set by **HWA_configParamSetFFT()**, set the trigger mode, acceleration mode, fft settings, input and output data patterns, etc.  
