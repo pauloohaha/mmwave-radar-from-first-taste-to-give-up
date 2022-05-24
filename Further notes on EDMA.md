@@ -87,5 +87,12 @@ There are intotal 4 channels in IWR6843AOP. From my understanding, each channel 
   • Line 344 to 347 set whether chaining or inturrpt are triggered after intermdiate TR (transfer request) and final TR. If *isFinalTransferInterruptEnabled* is enabled, the last TR will trigger the chaining; if *isIntermediateTransferInterruptEnabled* is enabled, the intermediate TRs will trigger the chaining. The defination of final and intermediate TR is related to transfer type. ACNT = 3, BCNT = 4, CCNT = 5, and TCC = 30. TCCHEN refer to final chaning, ITCCEN refer to intermediate chaining, the number of chaining events is at different settings are shown below:
   >![图片](https://user-images.githubusercontent.com/85469000/170059492-e33a5698-e334-4bc4-a59e-e00182d37cbb.png)
   
+  Lastly are the callback function and a *specialAPI* settings:
+  >![图片](https://user-images.githubusercontent.com/85469000/170060153-1635cee5-b5d2-424f-8e98-4d717de102a4.png)
+
+#### Start the testing
+  Back to *Test_unchainedUnlinked()*, since the *isUseSpecialStartAPI* in config is set to false, the code call *EDMA_startTransfer* to start the transfer. The main difference of the special APIs are that the *EDMA_startDmaTransfer()* and *EDMA_startQdmaTransfer()* are faster if the type of transfer is known.
+  >![图片](https://user-images.githubusercontent.com/85469000/170060407-f9fcac80-0400-41d2-8449-7250a7f67a33.png)
+
 
 
