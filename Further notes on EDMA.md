@@ -16,7 +16,7 @@ Like every C code, the test code start with *main()*, here initialize the SOC an
 In *Test_task()*, the code get the total number of EDMA instances on the device through *EDMA_getNumInstances()*. Lunch the *Test_instance()* on each instance.  
   >![图片](https://user-images.githubusercontent.com/85469000/169942883-02f0afef-3249-43c2-8aea-4b82eb3ecca9.png)
   
-On IMR6843AOP, the *numInstances* is 2. The IWR6843AOP has 2 channel controllers (CCs), thus a *EDMAinstance* refer to a channel controller.  
+On IMR6843AOP, the *numInstances* is 2. a *EDMAinstance* refer to a channel controller.  
   >![图片](https://user-images.githubusercontent.com/85469000/169943496-c7c730d2-4de5-4348-8a99-d471cea411a5.png)
 
 
@@ -55,10 +55,15 @@ Call *Test_simultaneousUnchainedUnlinkedTransfersSuite()* to start the testing.
 The testing function call *Test_init_testChannelConfig()* to initialize the EDMA channel:
   >![图片](https://user-images.githubusercontent.com/85469000/170011548-7160e968-5921-469b-a10f-4ba281b54d30.png)
   
-The *Test_init_testChannelConfig()* then collect the *transferCompletionCallbackFxn* and *transferCompletionCode* of each channel into *transferCompletionCallbackFxn[ ]* and *transferCompletionCode[ ]*, then call *Test_init()*:  
-  >![图片](https://user-images.githubusercontent.com/85469000/170013423-d7760736-b43c-453a-9b28-e332fcc598c7.png)
+The *Test_init_testChannelConfig()* then collect the *transferCompletionCallbackFxn* and *transferCompletionCode* of each channel. It also initialize the source, destination memory and *testState*, which record the state on the testing, including *isTransferDone* = false, *isTransferCompletionCodeInvalid* = false, *channelStart*, *channelEnd*, etc. There is no EDMA setting in this function, thus its code is neglected.
+  
+After the test is initalized, the test code call *Test_unchainedUnlinked*:
+  >![图片](https://user-images.githubusercontent.com/85469000/170042968-1d95662c-02fd-4ddd-81fc-263ce0b972f6.png)
+  
+*Test_unchainedUnlinked()* first configure all test channels:
+  >![图片](https://user-images.githubusercontent.com/85469000/170044830-fe5262f2-0a98-4607-bde2-dd866c700c97.png)
 
-Channel configurations:  
-  ![图片](https://user-images.githubusercontent.com/85469000/170021279-2f3a7349-a342-445a-9a9f-aaf8a6290650.png)
+There are intotal 4 channels in IWR6843AOP. From my understanding, each channel refer to one transfer controller. For each channel, the line 989 code get the configuration from *testChannelConfig[ ]*, which is an arguement get from upper layer, its variable name is *testChannelConfig__A_SINGLE_XFER_MIX_QDMA_DMA[ ]*. One of the channel setting is shown bellow:
+  >![图片](https://user-images.githubusercontent.com/85469000/170021279-2f3a7349-a342-445a-9a9f-aaf8a6290650.png)
 
 
