@@ -70,15 +70,22 @@ There are intotal 4 channels in IWR6843AOP. From my understanding, each channel 
   >![图片](https://user-images.githubusercontent.com/85469000/170050298-7ed067c7-2eaa-480a-a607-6f244000098c.png)
 
   • Line 323 to 347 configurate the *paramSetConfig*.  
-  Line 323 and 324 configurate the source and destination addresses.  
-  Line 325 to 327 configure the Acnt, Bcnt and Ccnt.  
-  Line 328 set the reload value for Bcnt when Bcnt is decreased to 0, this is only revelent in A-type transfer (introduced later).  
-  Line 329 to 332 set the source and destination Bidx and Cidx.  
-  Line 333 control the linking of parameter set, which means when the transfer of this parameter set is completed, the parameter set with idx set by this value will be loaded into this parameter set.  
+  • Line 323 and 324 configurate the source and destination addresses.  
+  • Line 325 to 327 configure the Acnt, Bcnt and Ccnt.  
+  • Line 328 set the reload value for Bcnt when Bcnt is decreased to 0, this is only revelent in A-type transfer (introduced later).  
+  • Line 329 to 332 set the source and destination Bidx and Cidx.  
+  • Line 333 control the linking of parameter set, which means when the transfer of this parameter set is completed, the parameter set with idx set by this value will be loaded into this parameter set.  
   >![图片](https://user-images.githubusercontent.com/85469000/170052978-8c24e6c2-ae48-45e9-93e9-f568d919212d.png)
   
-  Line 334 control the transfer type. There are 2 types of transfer in TI EDMA: A-type and AB-type. For A type, after the transfer of each array, SRCBIDX will be added to the start address of current array to get the starting address of next array. In AB type, the SRCCIDX will be added instead. This means that A type will transfer row by row, AB type will transfer column by column.
+  • Line 334 control the transfer type. There are 2 types of transfer in TI EDMA: A-type and AB-type. For A type, after the transfer of each array, SRCBIDX will be added to the start address of current array to get the starting address of next array. In AB type, the SRCCIDX will be added instead. This means that A type will transfer row by row, AB type will transfer column by column.
   >![图片](https://user-images.githubusercontent.com/85469000/170054530-74bc9e8c-9f7f-45ae-9ec9-6cb1dcd06f93.png)
-
+  
+  • Line 335 select the completion code, which will be used to set the relevant bit in chaining register or interrupt pending register.  
+  • Line 336 and 337 set the addressing mode between linear and constant addressing mode.  
+  • Line 342 set whether the parameter set is *static*. If this is set to true, it means this parameter set will be the last parameter set, no update or linking will be made. Otherwise this should be set to false.  
+  • Line 343 select wether *early completion* is enabled. Early completion refer to that a transfer is considered completed once it is submitted to TC, although the TC may still doing the transfer.  
+  • Line 344 to 347 set whether chaining or inturrpt are triggered after intermdiate TR (transfer request) and final TR. If *isFinalTransferInterruptEnabled* is enabled, the last TR will trigger the chaining; if *isIntermediateTransferInterruptEnabled* is enabled, the intermediate TRs will trigger the chaining. The defination of final and intermediate TR is related to transfer type. ACNT = 3, BCNT = 4, CCNT = 5, and TCC = 30. TCCHEN refer to final chaning, ITCCEN refer to intermediate chaining, the number of chaining events is at different settings are shown below:
+  >![图片](https://user-images.githubusercontent.com/85469000/170059492-e33a5698-e334-4bc4-a59e-e00182d37cbb.png)
+  
 
 
