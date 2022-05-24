@@ -58,5 +58,7 @@ The testing function call *Test_init_testChannelConfig()* to initialize the EDMA
 The *Test_init_testChannelConfig()* then collect the *transferCompletionCallbackFxn* and *transferCompletionCode* of each channel into *transferCompletionCallbackFxn[ ]* and *transferCompletionCode[ ]*, then call *Test_init()*:  
   >![图片](https://user-images.githubusercontent.com/85469000/170013423-d7760736-b43c-453a-9b28-e332fcc598c7.png)
 
+Channel configurations:  
+  ![图片](https://user-images.githubusercontent.com/85469000/170021279-2f3a7349-a342-445a-9a9f-aaf8a6290650.png)
 
 
