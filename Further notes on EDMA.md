@@ -63,7 +63,22 @@ After the test is initalized, the test code call *Test_unchainedUnlinked*:
 *Test_unchainedUnlinked()* first configure all test channels:
   >![图片](https://user-images.githubusercontent.com/85469000/170044830-fe5262f2-0a98-4607-bde2-dd866c700c97.png)
 
-There are intotal 4 channels in IWR6843AOP. From my understanding, each channel refer to one transfer controller. For each channel, the line 989 code get the configuration from *testChannelConfig[ ]*, which is an arguement get from upper layer, its variable name is *testChannelConfig__A_SINGLE_XFER_MIX_QDMA_DMA[ ]*. One of the channel setting is shown bellow:
-  >![图片](https://user-images.githubusercontent.com/85469000/170021279-2f3a7349-a342-445a-9a9f-aaf8a6290650.png)
+There are intotal 4 channels in IWR6843AOP. From my understanding, each channel refer to one transfer controller. For each channel, the line 989 code get the configuration from *testChannelConfig[ ]*, which is an arguement get from upper layer, its variable name is *testChannelConfig__A_SINGLE_XFER_MIX_QDMA_DMA[ ]*. The *config* contain following data fields:
+  >![图片](https://user-images.githubusercontent.com/85469000/170049938-e6e283b0-56b1-4f3d-8d14-2fb6e0542193.png)
+
+  • Line 319 to 322 cofigurate *channelId*, *paramId* and *eventQueueId*. They are responsible for chossing the TC, PaRAM and queue. The *channelType* can choose between *EDMA3_CHANNEL_TYPE_DMA* or *EDMA3_CHANNEL_TYPE_QDMA*.
+  >![图片](https://user-images.githubusercontent.com/85469000/170050298-7ed067c7-2eaa-480a-a607-6f244000098c.png)
+
+  • Line 323 to 347 configurate the *paramSetConfig*.  
+  Line 323 and 324 configurate the source and destination addresses.  
+  Line 325 to 327 configure the Acnt, Bcnt and Ccnt.  
+  Line 328 set the reload value for Bcnt when Bcnt is decreased to 0, this is only revelent in A-type transfer (introduced later).  
+  Line 329 to 332 set the source and destination Bidx and Cidx.  
+  Line 333 control the linking of parameter set, which means when the transfer of this parameter set is completed, the parameter set with idx set by this value will be loaded into this parameter set.  
+  >![图片](https://user-images.githubusercontent.com/85469000/170052978-8c24e6c2-ae48-45e9-93e9-f568d919212d.png)
+  
+  Line 334 control the transfer type. There are 2 types of transfer in TI EDMA: A-type and AB-type. For A type, after the transfer of each array, SRCBIDX will be added to the start address of current array to get the starting address of next array. In AB type, the SRCCIDX will be added instead. This means that A type will transfer row by row, AB type will transfer column by column.
+  >![图片](https://user-images.githubusercontent.com/85469000/170054530-74bc9e8c-9f7f-45ae-9ec9-6cb1dcd06f93.png)
+
 
 
