@@ -60,7 +60,7 @@ I also cover the test code provided by TI and some key points in [Radar Hardware
   • set done interrupt by **HWA_enableDoneInterrupt()**  
   • configurate common registers by **HWA_configCommon()**  
   • enable and reset by **HWA_enable()** and **HWA_reset()**  
-  • prepare the input and output
+  • prepare the input and output  
   • trigger HWA
   
 ### Enhanced-DMA (EDMA)
