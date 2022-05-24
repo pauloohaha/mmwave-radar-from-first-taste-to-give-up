@@ -91,8 +91,25 @@ There are intotal 4 channels in IWR6843AOP. From my understanding, each channel 
   >![图片](https://user-images.githubusercontent.com/85469000/170060153-1635cee5-b5d2-424f-8e98-4d717de102a4.png)
 
 #### Start the testing
-  Back to *Test_unchainedUnlinked()*, since the *isUseSpecialStartAPI* in config is set to false, the code call *EDMA_startTransfer* to start the transfer. The main difference of the special APIs are that the *EDMA_startDmaTransfer()* and *EDMA_startQdmaTransfer()* are faster if the type of transfer is known.
+Back to *Test_unchainedUnlinked()*, since the *isUseSpecialStartAPI* in config is set to false, the code call *EDMA_startTransfer* to start the transfer. The main difference of the special APIs are that the *EDMA_startDmaTransfer()* and *EDMA_startQdmaTransfer()* are faster if the type of transfer is known.
   >![图片](https://user-images.githubusercontent.com/85469000/170060407-f9fcac80-0400-41d2-8449-7250a7f67a33.png)
 
+Then, the code compute the time needed to start the transfer API to finish entrie EDMA transfer  
+  >![图片](https://user-images.githubusercontent.com/85469000/170062392-c7b4c6eb-a349-49a4-80cb-29bb25ffc97e.png)
+  
+Check whether a transfer is completed through *EDMA_isTransferComplete()*, if completed, the last arguement *testState.channelState[channel].isTransferDone* will be set to true.  
+  >![图片](https://user-images.githubusercontent.com/85469000/170063051-7dcae7e6-0cab-4f22-bd25-0278982dfae8.png)
+
+If a transfer is finished, kick start another transfer:
+  >![图片](https://user-images.githubusercontent.com/85469000/170063501-c3c791a9-5b04-429f-b807-1e4155bfa03a.png)
+
+Check whether the transfers are finished. Use *isTransfersDone* and *isChannelTransferDone* to indicate whether the current transfer is finished and whether all transfers are finished respectively.
+  >![图片](https://user-images.githubusercontent.com/85469000/170063703-5bd3d7c2-089d-4993-ab4a-91c1a06198fe.png)
+  
+Check the result of the testings:
+  >![图片](https://user-images.githubusercontent.com/85469000/170064215-6b237520-b193-43a3-b596-b6a0530493d6.png)
+
+Clean up with *EDMA_disableChannel*:
+  >![图片](https://user-images.githubusercontent.com/85469000/170064404-be951a31-e0f1-403a-a5d8-be6997f039fd.png)
 
 
