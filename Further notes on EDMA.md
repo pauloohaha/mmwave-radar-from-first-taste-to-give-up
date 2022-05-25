@@ -46,7 +46,7 @@ Configure the error call back function for CC and TC. *instanceInfo.isErrorInter
   >![图片](https://user-images.githubusercontent.com/85469000/170010908-93a04acd-2898-4bc6-8c16-43b1650d8049.png)
 
   #### Testing simultaneous unlinked unchained transfers
-Call *Test_simultaneousUnchainedUnlinkedTransfersSuite()* to start the testing.  
+Call *Test_simultaneousUnchainedUnlinkedTransfersSuite()* to start the testing. This testing is *simultaneous unlinked unchained transfers*:  
   >![图片](https://user-images.githubusercontent.com/85469000/170011064-76a3e80e-4be4-4dd0-8e1a-8fce0a084108.png)
   
 *Test_simultaneousUnchainedUnlinkedTransfersSuite()*:
@@ -112,4 +112,5 @@ Check the result of the testings:
 Clean up with *EDMA_disableChannel*:
   >![图片](https://user-images.githubusercontent.com/85469000/170064404-be951a31-e0f1-403a-a5d8-be6997f039fd.png)
 
+### Test chained transfers
 
