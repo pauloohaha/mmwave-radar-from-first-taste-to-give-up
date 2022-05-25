@@ -77,15 +77,15 @@ There are intotal 4 channels in IWR6843AOP. From my understanding, each channel 
   • Line 333 control the linking of parameter set, which means when the transfer of this parameter set is completed, the parameter set with idx set by this value will be loaded into this parameter set.  
   >![图片](https://user-images.githubusercontent.com/85469000/170052978-8c24e6c2-ae48-45e9-93e9-f568d919212d.png)
   
-  • Line 334 control the transfer type. There are 2 types of transfer in TI EDMA: A-type and AB-type. For A type, each event/transfer only transfer one dimension of data, which means one event only transfer Acnt bytes. Thus, Bcnt x Ccnt events are needed to transfer all datas. For AB type, one event/transfer transfer two dimensions of data, which means one event transfer Acnt x Bcnt bytes, which is entire row of data. Thus, Ccnt events are needed to transfer all datas.  
+  • Line 334 control the transfer type. There are 2 types of transfer in TI EDMA: A-type and AB-type. For A type, each event/transfer only transfer one dimension of data, which means one event only transfer Acnt bytes. Thus, Bcnt x Ccnt events are needed to transfer all datas. For AB type, one event/transfer transfer two dimensions of data, which means one event transfer Acnt x Bcnt bytes, which is entire row of data. Thus, Ccnt events are needed to transfer all datas. Since one EDMA transfer may need multiple event/transfer, the last one is called final TR (tranfer request) and all others are called intermediate TR.  
   >![图片](https://user-images.githubusercontent.com/85469000/170054530-74bc9e8c-9f7f-45ae-9ec9-6cb1dcd06f93.png)
   
   • Line 335 select the completion code, which is responsible for chaining. For example, consider an channel m need to chain to a channel n, which means the channel n will be triggered by m. Then, the idx of channel n need to be feed into the *transferCompletionCode* of channel m. Then, the channel m will trigger channel n when intermediate TR or final TR is submitted or completed, depending on the settings below.  
   • Line 336 and 337 set the addressing mode between linear and constant addressing mode.  
   • Line 342 set whether the parameter set is *static*. If this is set to true, it means this parameter set will be the last parameter set, no update or linking will be made. Otherwise this should be set to false.  
   • Line 343 select wether *early completion* is enabled. Early completion refer to that a transfer is considered completed once it is submitted to TC, although the TC may still doing the transfer.  
-  • Line 344 to 347 set whether chaining or inturrpt are triggered after intermdiate TR (transfer request) and final TR. If *isFinalTransferInterruptEnabled* is enabled, the last TR will trigger the chaining; if *isIntermediateTransferInterruptEnabled* is enabled, the intermediate TRs will trigger the chaining. The defination of final and intermediate TR is related to transfer type. ACNT = 3, BCNT = 4, CCNT = 5, and TCC = 30. TCCHEN refer to final chaning, ITCCEN refer to intermediate chaining, the number of chaining events is at different settings are shown below:
-  >![图片](https://user-images.githubusercontent.com/85469000/170059492-e33a5698-e334-4bc4-a59e-e00182d37cbb.png)
+  • Line 344 to 347 set whether chaining or inturrpt are triggered after intermdiate TR and final TR. If *isFinalTransferInterruptEnabled* is enabled, the last TR will trigger the chaining; if *isIntermediateTransferInterruptEnabled* is enabled, the intermediate TRs will trigger the chaining. One example of chaining settings is as follow. The TCCHEN an ITCCHEN refer to whether the chaining is enabled for final and intermediate TR respectively.   
+  >![图片](https://user-images.githubusercontent.com/85469000/170059492-e33a5698-e334-4bc4-a59e-e00182d37cbb.png)  
   
   Lastly are the callback function and a *specialAPI* settings:
   >![图片](https://user-images.githubusercontent.com/85469000/170060153-1635cee5-b5d2-424f-8e98-4d717de102a4.png)
@@ -94,7 +94,7 @@ There are intotal 4 channels in IWR6843AOP. From my understanding, each channel 
 Back to *Test_unchainedUnlinked()*, since the *isUseSpecialStartAPI* in config is set to false, the code call *EDMA_startTransfer* to start the transfer. The main difference of the special APIs are that the *EDMA_startDmaTransfer()* and *EDMA_startQdmaTransfer()* are faster if the type of transfer is known.
   >![图片](https://user-images.githubusercontent.com/85469000/170060407-f9fcac80-0400-41d2-8449-7250a7f67a33.png)
 
-Then, the code compute the time needed to start the transfer API to finish entrie EDMA transfer  
+Then, the code compute the time needed to start the transfer API to finish entrie EDMA transfer. Since the intermediate interrupt is enabled, the code need to kick off each transfer event manually.  
   >![图片](https://user-images.githubusercontent.com/85469000/170062392-c7b4c6eb-a349-49a4-80cb-29bb25ffc97e.png)
   
 Check whether a transfer is completed through *EDMA_isTransferComplete()*, if completed, the last arguement *testState.channelState[channel].isTransferDone* will be set to true.  
@@ -119,8 +119,21 @@ Clean up with *EDMA_disableChannel*:
   Similar to *Test_simultaneousUnchainedUnlinkedTransfersSuite()* mentioned previously, *Test_chainedTransfersSuite()* intialize the test records and call *Test_chainedTransfers()* to start the test:
   >![图片](https://user-images.githubusercontent.com/85469000/170172414-5f0f2da2-28d7-4fb8-a223-cbe2c7db7424.png)
   
-  The use the configuration from *testChannelConfig__A_SINGLE_XFER_CHAIN* to set the EDMA channel. The difference between this configuration and the previous *testChannelConfig__A_SINGLE_XFER_MIX_QDMA_DMA* is that it disable the intermediate and final interrupt but enable the final chaining.
+  The use the configuration from *testChannelConfig__A_SINGLE_XFER_CHAIN* to set the EDMA channel. The difference between this configuration and the previous *testChannelConfig__A_SINGLE_XFER_MIX_QDMA_DMA* is that it disable the intermediate and final interrupt but enable the final chaining. Since the intermediate interrupt is disabled, there is no need to trigger each TR manually.
   >![图片](https://user-images.githubusercontent.com/85469000/170173752-2980ae8d-bc3b-47d7-96e9-621170099f5d.png)
+  
+  Set up the chaining of EDMA channels. In total there are 4 EDMA channels in the config, the *channelEnd* is 3. Thus the code loop through the first 3 EDMA channels and call *EDMA_chainChannels()* to set the chaining. The last EDMA channel should has only final transfer interrupt enabled, it should no chain to other EDMA channels.
+  >![图片](https://user-images.githubusercontent.com/85469000/170179487-36949361-a0d9-427a-ab14-0dc75c1ea3aa.png)
+  
+  Next, the code kick off the first EDMA channel, then it will finish all the TRs can trigger next EDMA channel:
+  >![图片](https://user-images.githubusercontent.com/85469000/170179802-53c07487-8676-4c63-8649-6ac3926e54af.png)
+
+  All it left is wait for the completion and check the result:
+  >![图片](https://user-images.githubusercontent.com/85469000/170179891-7b0336fe-b8fd-4404-931e-b2fee57768f1.png)
+
+ 
+  
+
 
 
 
