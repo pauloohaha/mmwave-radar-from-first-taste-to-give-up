@@ -11,7 +11,9 @@ When starting to learn the MMWave radar, the biggest problem a beginner faces is
 ## About
 In this repository, I will not cover everthing about the radar. I am not capable of that and I think most documents are easy to understand. But, I will introduce to you, from my own experience, where to start, what to read and in which order. In the [Reference](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/main/Reference.md#learining-guide-and-reference) file, I will briefly introduce the radar system. Then guide you through some improtant documents that you may wish to read first.  
 
-In the *Datapath* branch, I will summarize the information from *mmwave_sdk_module_documentation* and provide my own understandings about the processing of the data in the radar system.  
+In the [Datapath](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/tree/Datapath#datapath) branch, I will summarize the information from *mmwave_sdk_module_documentation* and provide my own understandings about the processing of the data in the radar system. I explain the test codes provided by TI for HWA, EDMA and RangeProc DPU will relavent documents.  
+
+In the [RF](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/tree/RF#rf-components-of-mmwave-radar) branch, I will explain the setting of RF components.
 
 ## Reference and sources
 Most of the knowledge covered here are read from documents produced by TI. They have done an excellent job creating these documents, credits to them.  
