@@ -60,7 +60,7 @@ The *Test_init_testChannelConfig()* then collect the *transferCompletionCallback
 After the test is initalized, the test code call *Test_unchainedUnlinked*:
   >![图片](https://user-images.githubusercontent.com/85469000/170042968-1d95662c-02fd-4ddd-81fc-263ce0b972f6.png)
   
-*Test_unchainedUnlinked()* first configure all test channels:
+*Test_unchainedUnlinked()* first configure all test channels, set *transferCompletionCallbackFxnArg* to the EDMA handle:
   >![图片](https://user-images.githubusercontent.com/85469000/170044830-fe5262f2-0a98-4607-bde2-dd866c700c97.png)
 
 There are intotal 4 channels in IWR6843AOP. From my understanding, each channel refer to one transfer controller. For each channel, the line 989 code get the configuration from *testChannelConfig[ ]*, which is an arguement get from upper layer, its variable name is *testChannelConfig__A_SINGLE_XFER_MIX_QDMA_DMA[ ]*. The *config* contain following data fields:
@@ -80,7 +80,7 @@ There are intotal 4 channels in IWR6843AOP. From my understanding, each channel 
   • Line 334 control the transfer type. There are 2 types of transfer in TI EDMA: A-type and AB-type. For A type, after the transfer of each array, SRCBIDX will be added to the start address of current array to get the starting address of next array. In AB type, the SRCCIDX will be added instead. This means that A type will transfer row by row, AB type will transfer column by column.
   >![图片](https://user-images.githubusercontent.com/85469000/170054530-74bc9e8c-9f7f-45ae-9ec9-6cb1dcd06f93.png)
   
-  • Line 335 select the completion code, which will be used to set the relevant bit in chaining register or interrupt pending register.  
+  • Line 335 select the completion code, which is responsible for chaining. For example, consider an channel m need to chain to a channel n, which means the channel n will be triggered by m. Then, the idx of channel n need to be feed into the *transferCompletionCode* of channel m. Then, the channel m will trigger channel n when intermediate TR or final TR is submitted or completed, depending on the settings below.  
   • Line 336 and 337 set the addressing mode between linear and constant addressing mode.  
   • Line 342 set whether the parameter set is *static*. If this is set to true, it means this parameter set will be the last parameter set, no update or linking will be made. Otherwise this should be set to false.  
   • Line 343 select wether *early completion* is enabled. Early completion refer to that a transfer is considered completed once it is submitted to TC, although the TC may still doing the transfer.  
@@ -113,4 +113,14 @@ Clean up with *EDMA_disableChannel*:
   >![图片](https://user-images.githubusercontent.com/85469000/170064404-be951a31-e0f1-403a-a5d8-be6997f039fd.png)
 
 ### Test chained transfers
+  The test is stared from *Test_instance()* here:
+  >![图片](https://user-images.githubusercontent.com/85469000/170172264-2e638c22-9d05-4686-8991-4c6e40140f08.png)
+  
+  Similar to *Test_simultaneousUnchainedUnlinkedTransfersSuite()* mentioned previously, *Test_chainedTransfersSuite()* intialize the test records and call *Test_chainedTransfers()* to start the test:
+  >![图片](https://user-images.githubusercontent.com/85469000/170172414-5f0f2da2-28d7-4fb8-a223-cbe2c7db7424.png)
+  
+  The use the configuration from *testChannelConfig__A_SINGLE_XFER_CHAIN* to set the EDMA channel. The difference between this configuration and the previous *testChannelConfig__A_SINGLE_XFER_MIX_QDMA_DMA* is that it disable the intermediate and final interrupt but enable the final chaining.
+  >![图片](https://user-images.githubusercontent.com/85469000/170173752-2980ae8d-bc3b-47d7-96e9-621170099f5d.png)
+
+
 
