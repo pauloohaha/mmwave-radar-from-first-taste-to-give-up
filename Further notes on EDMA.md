@@ -6,7 +6,8 @@ The diagram for one channel controller (CC) in EDMA is as follow:
 
   
 ## Code explaination
-  
+
+All codes below are from *mmwave_sdk_<ver>\packages\ti\drivers\edma\test\main.c*  
 Like every C code, the test code start with *main()*, here initialize the SOC and start the *Test_task()*:  
   >![图片](https://user-images.githubusercontent.com/85469000/169942669-75f543ab-0314-4042-b749-79c8dc3da9b2.png)
   >![图片](https://user-images.githubusercontent.com/85469000/169942704-d58b1938-7d5f-4dba-942d-10327c1d3e31.png)
