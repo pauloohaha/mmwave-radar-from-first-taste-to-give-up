@@ -32,6 +32,25 @@ The first step of the data processing is do the FFT on ADC samples for range cal
 
   In this specific function, it initialize the variable and allocate memory for it. Then, it get the HWA bank memory address by *HWA_getHWAMemInfo()*, set the semaphores for HWA and EDMA.  
   >![图片](https://user-images.githubusercontent.com/85469000/170198569-0ab7d613-a7b1-443a-bc75-6666b91e0552.png)
+  
+  Back to the *hwa_main.c*, the returned handle is passed to *rangeProcDpuHandle*， which is a global variable.
+  
+  Thus far, the test code has finished the initialization. It then starts to configure the test through *rangeProcDpuTest_dpuCfg()*. The main purpose of this function is to configure a global variable *DPU_RangeProcHWA_Config rangeProcDpuCfg*.
+  >![图片](https://user-images.githubusercontent.com/85469000/170201774-e67e927f-f136-43c7-9cc1-5baaff7a08a9.png)
+  
+  *rangeProcDpuCfg* has follow 3 data fields:
+  >![图片](https://user-images.githubusercontent.com/85469000/170201406-b043d1c2-565b-4e6a-9589-3608b408da0c.png)
+  
+  The function first configure the *hwRes* data field. Including the starting parameter set Idx, the total number of parameter sets needed (which is 4, 2 for each Ping and Pong). The windowing settings and input settings. The edma settings are ignored here. I suppose it will be set later during interleaving settings.
+  >![图片](https://user-images.githubusercontent.com/85469000/170201962-feec972f-bb4f-47c4-82e1-f9c19cf4ab1f.png)
+  
+  Then
+  >![图片](https://user-images.githubusercontent.com/85469000/170202594-aa6a6359-644b-46c8-9ed8-5300836d14dd.png)
+  
+  >![图片](https://user-images.githubusercontent.com/85469000/170203166-d3b62333-082c-4509-9882-5e80ddfa9a47.png)
+
+
+  
 
 
 
