@@ -112,7 +112,7 @@ Check the result of the testings:
 Clean up with *EDMA_disableChannel*:
   >![图片](https://user-images.githubusercontent.com/85469000/170064404-be951a31-e0f1-403a-a5d8-be6997f039fd.png)
 
-### Test chained transfers
+### Test chained parameter sets
   The test is stared from *Test_instance()* here:
   >![图片](https://user-images.githubusercontent.com/85469000/170172264-2e638c22-9d05-4686-8991-4c6e40140f08.png)
   
@@ -131,8 +131,18 @@ Clean up with *EDMA_disableChannel*:
   All it left is wait for the completion and check the result:
   >![图片](https://user-images.githubusercontent.com/85469000/170179891-7b0336fe-b8fd-4404-931e-b2fee57768f1.png)
 
- 
+ ### Test linked parameter sets
+  The configuration linked testing use is *testChannelConfig__A_SINGLE_XFER_DMA_LINK*. Difference from previous configuration, where 4 channels' settings are listed speratly, here the settings for another 2 channel are in *paramConfig[ ]*. The *channelId*, *channelType* and *eventQueueId* are not seperatly set in other parameter sets. The paramId of the another 2 channel is different from the first channel.
+  >![图片](https://user-images.githubusercontent.com/85469000/170182375-6073ec35-f975-4cfa-b07f-93e5a052d9f0.png)
+
+  In *Test_linkedTransfers()*, the code configure all 3 parameter sets, and setup the linking:
+  >![图片](https://user-images.githubusercontent.com/85469000/170183022-ce4d31df-7a52-420a-8626-f65bfda6ca25.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/170183041-8c4e482c-70e6-45c9-8c11-c5c3cfbb1126.png)
   
+  Then kick off the channel, wait for it to complete, then kick off the same channel again, since it has already load the new parameter set from the linked parameter set:
+  >![图片](https://user-images.githubusercontent.com/85469000/170183249-81330292-af04-4471-85b6-acca39f51f72.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/170183271-d259c4d9-fd20-4d16-a30b-c8eb7a4579e5.png)
+
 
 
 
