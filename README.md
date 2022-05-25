@@ -55,11 +55,11 @@ I also cover the test code provided by TI and some key points in [Radar Hardware
   For HWA, the procedure of controlling HWA is as follow:  
   • **HWA_init()**  
   • get a *handle* = **HWA_open()**  
-  • configurate a parameter set by **HWA_configParamSetFFT()**, set the trigger mode, acceleration mode, fft settings, input and output data patterns, etc.  
-  • configurate window coefficients by **HWA_configRam()**  
-  • set done interrupt by **HWA_enableDoneInterrupt()**  
-  • configurate common registers by **HWA_configCommon()**  
-  • enable and reset by **HWA_enable()** and **HWA_reset()**  
+  • call **HWA_configParamSetFFT()** to configurate a parameter set, set the trigger mode, acceleration mode, fft settings, input and output data patterns, etc.  
+  • call **HWA_configRam()** to configurate window coefficients  
+  • call **HWA_enableDoneInterrupt()** to set done interrupt  
+  • call **HWA_configCommon()** to configure all common registers  
+  • call **HWA_enable()** and **HWA_reset()** to enable and reset HWA  
   • prepare the input and output  
   • trigger HWA
   
