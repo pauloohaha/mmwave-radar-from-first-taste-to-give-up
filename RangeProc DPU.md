@@ -111,6 +111,14 @@ The first step of the data processing is do the FFT on ADC samples for range cal
 
   Inside *rangeProcHWAObj*, other than *edmaDoneSemaHandle*, *hwaDoneSemaHandle*, *dcRangeSigCalibCntr*, *calibDcRangeSigCfg*, *hwaMemBankAddr*, *calibDcNumLog2AvgChirps*, *inProgress*, *numProcess* and *numEdmaDataOutCnt*, all others are set.
   
+  DC calibration settings are set next:
+  >![图片](https://user-images.githubusercontent.com/85469000/177107513-2222ea7a-35c8-420d-8c6f-96d7263e200f.png)
+  
+  In *rangeProcHWA_dcRangeSignatureCompensation_init()*, *dcRangeSigMean*, *dcRangeSigMean*, *dcRangeSigCalibCntr* and *calibDcNumLog2AvgChirps* are set.
+  
+  After the initialization of *rangeProcHWAObj*, the HWA is reset and window parameters are set:  
+  >![图片](https://user-images.githubusercontent.com/85469000/177108053-539f9a32-b301-4bbb-a667-e9a1b11f7fe1.png)
+
 
 
 
