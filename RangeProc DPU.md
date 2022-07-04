@@ -88,8 +88,31 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   The *radarCube* settings:
   >![图片](https://user-images.githubusercontent.com/85469000/177102388-2fc33fb9-3e65-43ae-84f7-69efa9099ed1.png)
 
-  Back to *rangeProcDpuTest_Task()*, the program then call *DPU_RangeProcHWA_config()*. It uses the *rangeProcDpuCfg* to initialize *rangeProcDpuHandle*
+  Back to *rangeProcDpuTest_Task()*, the program then call *DPU_RangeProcHWA_config()*. It uses the *rangeProcDpuCfg* to initialize *rangeProcDpuHandle*, which is acutally of *rangeProcHWAObj* type. The handle it self is a pointer of viod type.  
   >![图片](https://user-images.githubusercontent.com/85469000/177103028-512c6cb9-3ea6-434e-8174-e770553c407b.png)
+  
+  The *DPU_RangeProcHWA_config()* first perform a series of checking on the settings. Such as whether the handles are valid, the data format is supported, windowing size is correct, radar cube size is correct and so on.  
+  >![图片](https://user-images.githubusercontent.com/85469000/177104271-44674035-7ba0-4074-a61b-54210bb542e6.png)
+  
+  After the checking, the program copy the *calibDcRangeSigCfg* from *pConfigIn* to *rangeProcObj* and call *rangeProcObj()*, which basically copy every needed data from *pConfigIn* to *rangeProcObj*.  
+  >![图片](https://user-images.githubusercontent.com/85469000/177104738-2db2c615-5072-41fd-b36e-b4ebf38913e2.png)
+  
+  Copy *param*:  
+  >![图片](https://user-images.githubusercontent.com/85469000/177105586-fcd7e8e5-0fed-4bd4-bca2-1e8f7ebac341.png)
+  
+  Copy data buffers' pointer and  the *rxChanOffset* if in non-interleaved mode.  
+  >![图片](https://user-images.githubusercontent.com/85469000/177105651-a064a472-229b-41ae-bfae-454f6f41fd90.png)
+
+  Set the data format and return error if two cases that can not be handled happen:
+  >![图片](https://user-images.githubusercontent.com/85469000/177106106-9ac8036b-4eef-43ea-8a9c-460b63622b5b.png)
+
+  Save others:
+  >![图片](https://user-images.githubusercontent.com/85469000/177106163-37d6e2a2-7c3b-4c39-9478-46b0711e86a8.png)
+
+  Inside *rangeProcHWAObj*, other than *edmaDoneSemaHandle*, *hwaDoneSemaHandle*, *dcRangeSigCalibCntr*, *calibDcRangeSigCfg*, *hwaMemBankAddr*, *calibDcNumLog2AvgChirps*, *inProgress*, *numProcess* and *numEdmaDataOutCnt*, all others are set.
+  
+
+
 
 
 
