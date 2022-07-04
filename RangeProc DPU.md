@@ -44,13 +44,58 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   The function first configure the *hwRes* data field. Including the starting parameter set Idx, the total number of parameter sets needed (which is 4, 2 for each Ping and Pong). The windowing settings and input settings. The edma settings are ignored here. I suppose it will be set later during interleaving settings.
   >![图片](https://user-images.githubusercontent.com/85469000/170201962-feec972f-bb4f-47c4-82e1-f9c19cf4ab1f.png)
   
-  Then
+  Then, the ADC bit, numChirpsPerChirpEvent and ADCBufData is set. *adcDataIn* here is a global variable. It will be filled with sample data in from test file.
   >![图片](https://user-images.githubusercontent.com/85469000/170202594-aa6a6359-644b-46c8-9ed8-5300836d14dd.png)
   
   >![图片](https://user-images.githubusercontent.com/85469000/170203166-d3b62333-082c-4509-9882-5e80ddfa9a47.png)
 
+  The *radarCube* is also linked. This is also a global variable.
+  >![图片](https://user-images.githubusercontent.com/85469000/177093568-86f098d7-e058-4198-a3d1-7c9114b7d709.png)
+ 
+  Back to *rangeProcDpuTest_Task()*, the program then read *numDataReadIn& and calculate the total number of tests. The *numDataReadIn* is 15 and *numTests* is 504.
+  >![图片](https://user-images.githubusercontent.com/85469000/177095763-9644ad27-9240-4ab1-a973-64b7c9879b82.png)
+  
+  Next, the program loop through each test. It first read the *numTxAntennas*, *numRangeBins* and *numChirpsPerFrameRef*.
+  >![图片](https://user-images.githubusercontent.com/85469000/177095845-9d21451f-c4a2-469e-acda-2a297538b06f.png)
+  
+  Next, check whether the setting is valid:
+  >![图片](https://user-images.githubusercontent.com/85469000/177096222-8f2315e8-20a6-4e72-ad1c-aaf96d9a4b3e.png)
+  
+  Print out the setting:
+  >![图片](https://user-images.githubusercontent.com/85469000/177096400-4650fe43-c3ff-414d-8941-cd0005814ffc.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/177096424-eeb9ab0b-623e-43e4-a6b0-62536dea8b88.png)
+  
+  Next, the program set some settings depent on different tests, such as num of RX, TX ANT, num of ADCsamples and so on. They are recorded in *testConfig*. And the test setting is printed:
+  >![图片](https://user-images.githubusercontent.com/85469000/177098065-b515c02c-a04a-4ae0-b020-f677a31b29ec.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/177098084-fed941a6-4543-4418-ab9a-e1435cc61eb6.png)
+  
+  Then, the *Test_setProfile()* is called:
+  >![图片](https://user-images.githubusercontent.com/85469000/177098227-e0be10df-04a2-411a-b050-17553cede51c.png)
+  
+  In *Test_setProfile()*, the program first copy the settings recorded in *testConfig* to *param*.
+  >![图片](https://user-images.githubusercontent.com/85469000/177100954-ba9df73f-3864-49d8-b74e-be92ac14c014.png)
+  
+  Some setting about butterfly stage:
+  >![图片](https://user-images.githubusercontent.com/85469000/177101150-1139258a-bfd3-4ec8-b3fb-2b00bb08f9d8.png)
+  
+  The *rxChanOffset* is set. In non-interleaved mode, this is used to indicate where the data for this RX anteena start in ADC buffer.
+  >![图片](https://user-images.githubusercontent.com/85469000/177101506-712c20d6-2782-4f4a-9746-e9e1b3d52d26.png)
+
+  EDMA for data input and output is set:
+  >![图片](https://user-images.githubusercontent.com/85469000/177102061-74c0d953-1ad6-449a-ada6-ab4e0c2aa6de.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/177102297-245cdeb0-289a-4191-b99a-d11397b6d2b4.png)
+  
+  The *radarCube* settings:
+  >![图片](https://user-images.githubusercontent.com/85469000/177102388-2fc33fb9-3e65-43ae-84f7-69efa9099ed1.png)
+
+  Back to *rangeProcDpuTest_Task()*, the program then call *DPU_RangeProcHWA_config()*. It uses the *rangeProcDpuCfg* to initialize *rangeProcDpuHandle*
+  >![图片](https://user-images.githubusercontent.com/85469000/177103028-512c6cb9-3ea6-434e-8174-e770553c407b.png)
+
+
 
   
+
+
 
 
 
