@@ -106,8 +106,9 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   Set the data format and return error if two cases that can not be handled happen:
   >![图片](https://user-images.githubusercontent.com/85469000/177106106-9ac8036b-4eef-43ea-8a9c-460b63622b5b.png)
 
-  Save others:
+  Here the arrangement of 4 HWA parameter sets. After the data in EDMA is finished, it will write dataInTrigger[0] and dataInTrigger[1] into HWA's DMA2ACCTRIG to trigger these 2 parameter sets to trigger the processing of HWA. When the data out EDMA is finished, it will trigger the dummy parameter set of HWA.
   >![图片](https://user-images.githubusercontent.com/85469000/177106163-37d6e2a2-7c3b-4c39-9478-46b0711e86a8.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/177121169-60e7be89-a925-4bf8-bfb3-f10894dea34f.png)
 
   Inside *rangeProcHWAObj*, other than *edmaDoneSemaHandle*, *hwaDoneSemaHandle*, *dcRangeSigCalibCntr*, *calibDcRangeSigCfg*, *hwaMemBankAddr*, *calibDcNumLog2AvgChirps*, *inProgress*, *numProcess* and *numEdmaDataOutCnt*, all others are set.
   
@@ -119,7 +120,22 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   After the initialization of *rangeProcHWAObj*, the HWA is reset and window parameters are set:  
   >![图片](https://user-images.githubusercontent.com/85469000/177108053-539f9a32-b301-4bbb-a667-e9a1b11f7fe1.png)
 
+  At last, all the preperation is finished and *rangeProcHWA_HardwareConfig()* is called to acutally config the EDMAs and HWA.  
+  Depend on interleave or not, the function call the subsequent function corespondingly:  
+  >![图片](https://user-images.githubusercontent.com/85469000/177122216-1e2cce5d-dd90-4dee-8761-5d14786a2aea.png)
+  
+  Take non interleaved *rangeProcHWA_ConifgNonInterleaveMode()* as example. It mainly config the EDMA for data in (if isolated mode), the HWA parameter set and EDMA for data out.  
+  
+  The *rangeProcHWA_ConfigEDMA_DataIn()* is used to configure data in EDMA. It uses data path EDMA (DPEDMA) untilities to set the EDMA easier. For noninterleaved, it uses *DPEDMA_configSyncAB()* to condigure EDMA. Its argument is listed below. The *chanCfg* is set ealier, thus use directly. The chainCfg control the chaning of the dataIn EDMA. This EDMA is chained to data in one hot signature EDMA to trigger the HWA after the data is moved into the HWA local memory. Only the final chaining is needed. Since this is non interleaved mode, the data for one antenna is stored linearly. So the EDMA read the data sequentially and write to two HWA local memory M0 and M1 respectively.
+  >![图片](https://user-images.githubusercontent.com/85469000/177124187-656e9334-9dd7-471e-bc41-0f164892be79.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/177124331-d6729e71-c8ba-47f6-94ca-6759c22c6027.png)
 
+  Next, the data in one hot signature EDMA transfer is configurated through *DPEDMAHWA_configTwoHotSignature()*. It use the *&pHwConfig->edmaInCfg.dataInSignature* channel and trigger the two HWA parameter set by writing into DMA2ACCTRIG register in HWA.
+  >![图片](https://user-images.githubusercontent.com/85469000/177125660-7dc3cd76-2056-4e04-aae9-1ad1dbd10562.png)
+  
+  The *rangeProcHWA_ConfigHWA()* is used to configure the HWA. 
+
+  
 
 
 
