@@ -121,7 +121,7 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   >![图片](https://user-images.githubusercontent.com/85469000/177108053-539f9a32-b301-4bbb-a667-e9a1b11f7fe1.png)
 
   At last, all the preperation is finished and *rangeProcHWA_HardwareConfig()* is called to acutally config the EDMAs and HWA.  
-  Depend on interleave or not, the function call the subsequent function corespondingly:  
+  Depend on whether the ADC sample is interleaved or not, the function call the subsequent function corespondingly:  
   >![图片](https://user-images.githubusercontent.com/85469000/177122216-1e2cce5d-dd90-4dee-8761-5d14786a2aea.png)
   
   Take non interleaved *rangeProcHWA_ConifgNonInterleaveMode()* as example. It mainly config the EDMA for data in (if isolated mode), the HWA parameter set and EDMA for data out.  
@@ -146,13 +146,45 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   Next are the settings for data input and output formattor:
   >![图片](https://user-images.githubusercontent.com/85469000/177247048-e4163a2d-74b4-454d-86e6-84c09f7557c9.png)
   
-  Here set the format of input data and output data. Each of them are either interleaved or not. For input data, the *DPIF_RXCHAN_INTERLEAVE_MODE* indicate whether the input data is interleaved. If interleaved, the data for one RX ANT is stored in one column. If not interleaved, the data for one RX ANT is in one row. For output radarcube, the *rangeProc_dataLayout_RANGE_DOPPLER_TxAnt_RxAnt* indicate whether it is interleaved or not.
-  >![图片](https://user-images.githubusercontent.com/85469000/177247887-e7da8991-d068-43fd-8c07-3fa514c00cfa.png)
+  Here set the format of input data and output data. Each of them are either interleaved or not. For input data, the *DPIF_RXCHAN_INTERLEAVE_MODE* indicate whether the input data is interleaved. If interleaved, the data for one RX ANT is stored in one column. If not interleaved, the data for one RX ANT is in one row. For output to the HWA local memory and radar cube, the *rangeProc_dataLayout_RANGE_DOPPLER_TxAnt_RxAnt* indicate whether it is interleaved or not.  
+  >![图片](https://user-images.githubusercontent.com/85469000/177247887-e7da8991-d068-43fd-8c07-3fa514c00cfa.png)  
   
-  Next, the finished interrupt is set. The *destChanPing* should be used latter in data out EDMA.
+  If the *rangeProc_dataLayout_RANGE_DOPPLER_TxAnt_RxAnt* is ture, the output data looks like:  
+  >![图片](https://user-images.githubusercontent.com/85469000/177252643-282b828f-c51c-4b4e-b622-5c99bf5848b5.png)  
+  
+  If it is not ture, the output data looks like:  
+  >![图片](https://user-images.githubusercontent.com/85469000/177252670-55e870b4-abbe-4f96-acdb-b9a4241ef87f.png)  
+
+  
+  Next, the finished interrupt is set. The *destChanPing* should be used latter in data out EDMA. *destChanPing* = 0, *destChanPong* = 1.
   >![图片](https://user-images.githubusercontent.com/85469000/177249056-3e3e2321-ff49-4a85-839a-0165ff3e5c9d.png)
   
   The dummy parameter set and process parameter set for PONG are similar, they are omited.
+  
+  Next, the data out EDMA is set. Data out EDMA is triggered by the completion of process parameter sets. It move the data from HWA local memory to radar cube. It also trigger the data out one hot signature EDMA.
+  >![图片](https://user-images.githubusercontent.com/85469000/177249313-9de6e9be-4101-4ff3-b065-199ddd5eeedb.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/177249432-1083df12-977c-4ab7-81be-8050abdefa91.png)
+  
+  If the output data in HWA local memory is interleaved (*rangeProc_dataLayout_RANGE_DOPPLER_TxAnt_RxAnt* is true), the radar cube is also interleaved. In this case, the output data can be copied to radar cube directly. aCnt is length 4 RX ANT, bCnt is num of rangeBins, cCnt is the number of chirps per PING/PONG.  
+  >![图片](https://user-images.githubusercontent.com/85469000/177255375-96ed4aa6-4866-4736-ac78-e7bd023d8c8a.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/177255426-e9239d1b-fe52-4b8b-896f-3648c20357a9.png)
+  
+  If the output data in HWA local memory is non-interleaved (*rangeProc_dataLayout_RANGE_DOPPLER_TxAnt_RxAnt* is false), the radar cube is also not interleaved. This case is complex. In the radar cube, results of one TX ANT is stored continuously. In each TX antenna datas, each doppler chirp is stored continuously. Each PING or PONG has 3 EDMA ParamSet linked together, moving the data of each TX ANT to their especific destination address. For PING as example, there are 3 shallow EDMA linked one by one, they move data from M2 to TX1, TX3 and TX2 repectively.
+  >![图片](https://user-images.githubusercontent.com/85469000/177256710-a3cb29fd-cfe7-47e6-b354-55e1dea8f39e.png)
+  
+  Firstly, the destination of each TX, RX ANT combination is calculated. destAddr[0][] refer to PING, destAddr[1][] refer to PONG. destAddr[][0, 1, 2] refer to TX 1, 3, 2 repectively.
+  >![图片](https://user-images.githubusercontent.com/85469000/177257171-805a9ac1-c97b-4ec8-8ecf-d2dc933050c0.png)
+
+  Next, the code initialize three dummy EDMA ParamSet and lnk them together.
+  >![图片](https://user-images.githubusercontent.com/85469000/177260640-865f0468-1546-43a6-8d3c-efbd19d2a208.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/177260772-204b9c87-f799-4c4b-8d2c-af1dd8be0a5b.png)\
+  
+  Then, each of them is loaded with correct sourceAddr and destAddr.
+  >![图片](https://user-images.githubusercontent.com/85469000/177260832-af07f956-9dd8-41e7-b4c0-4ffe029a4105.png)
+
+
+
+
 
 
   
