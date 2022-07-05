@@ -130,10 +130,30 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   >![图片](https://user-images.githubusercontent.com/85469000/177124187-656e9334-9dd7-471e-bc41-0f164892be79.png)
   >![图片](https://user-images.githubusercontent.com/85469000/177124331-d6729e71-c8ba-47f6-94ca-6759c22c6027.png)
 
-  Next, the data in one hot signature EDMA transfer is configurated through *DPEDMAHWA_configTwoHotSignature()*. It use the *&pHwConfig->edmaInCfg.dataInSignature* channel and trigger the two HWA parameter set by writing into DMA2ACCTRIG register in HWA.
+  Next, the data in one hot signature EDMA transfer is configurated through *DPEDMAHWA_configTwoHotSignature()*. It use the *&pHwConfig->edmaInCfg.dataInSignature* channel and trigger the two HWA parameter set by writing into DMA2ACCTRIG register in HWA. Here, the *dataInTrigger[0]* and *dataInTrigger[1]* are 6 and 8 repectively.  
   >![图片](https://user-images.githubusercontent.com/85469000/177125660-7dc3cd76-2056-4e04-aae9-1ad1dbd10562.png)
   
-  The *rangeProcHWA_ConfigHWA()* is used to configure the HWA. 
+  The *rangeProcHWA_ConfigHWA()* is used to configure the HWA. It is responsible for configurating 4 parameter sets in HWA, one dummy set and one peocess parameter set for each PING and PONG. Take PING as example. In isolated mode, the data in EDMA trigger the process parameter set directly after the data is moved into the local memory of HWA. Thus, the parameter set index for the PING's process parameter set is *dataInTrigger[0]*  = 6. In mapped mode, the process parameter set is triggered when ADC buffer is switched from PING to PONG or PONG to PING. Dummy parameter sets are triggered by software through DMA trigger.
+  >![图片](https://user-images.githubusercontent.com/85469000/177246098-399ad375-c20e-4426-8afa-d12e34b474f8.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/177246395-910e0eca-cc96-469c-9890-8cad99d68429.png)
+  
+  The configuration of dummy parameter set is easy. The trigger mode is DMA, DMA trigger source is set to its parameter set IDX, the accelerate mode is set to NONE.
+  >![图片](https://user-images.githubusercontent.com/85469000/177246714-34195fa4-6dd7-4380-8280-8b8e7680f811.png)
+  
+  Next are the settings of PING process parameter set. Firstly, the trigger mode is configurated. In mapped mode, the process parameter is triggered when the ADC buffer switch from ping to pong or ping to ping, thus set to DEF. In isolated mode, it is triggered by the completion of data in EDMA, thus the trigger mode is DMA.
+  >![图片](https://user-images.githubusercontent.com/85469000/177246814-6b4fa90a-fc52-4fcd-a422-3b38793a2da3.png)
+  
+  Next are the settings for data input and output formattor:
+  >![图片](https://user-images.githubusercontent.com/85469000/177247048-e4163a2d-74b4-454d-86e6-84c09f7557c9.png)
+  
+  Here set the format of input data and output data. Each of them are either interleaved or not. For input data, the *DPIF_RXCHAN_INTERLEAVE_MODE* indicate whether the input data is interleaved. If interleaved, the data for one RX ANT is stored in one column. If not interleaved, the data for one RX ANT is in one row. For output radarcube, the *rangeProc_dataLayout_RANGE_DOPPLER_TxAnt_RxAnt* indicate whether it is interleaved or not.
+  >![图片](https://user-images.githubusercontent.com/85469000/177247887-e7da8991-d068-43fd-8c07-3fa514c00cfa.png)
+  
+  Next, the finished interrupt is set. The *destChanPing* should be used latter in data out EDMA.
+  >![图片](https://user-images.githubusercontent.com/85469000/177249056-3e3e2321-ff49-4a85-839a-0165ff3e5c9d.png)
+  
+  The dummy parameter set and process parameter set for PONG are similar, they are omited.
+
 
   
 
