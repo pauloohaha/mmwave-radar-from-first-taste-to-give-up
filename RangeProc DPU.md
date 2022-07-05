@@ -156,12 +156,13 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   >![图片](https://user-images.githubusercontent.com/85469000/177252670-55e870b4-abbe-4f96-acdb-b9a4241ef87f.png)  
 
   
-  Next, the finished interrupt is set. The *destChanPing* should be used latter in data out EDMA. *destChanPing* = 0, *destChanPong* = 1.
+  Next, the finished interrupt is set. The *destChanPing* and *destChanPong* are translated from the "edmaChanPing" and *edmaChanPong*. When the HWA finish computation, it trigger the two DMA channel, which is the 2 data out EDMA channel.
+  >![图片](https://user-images.githubusercontent.com/85469000/177268304-2774e1a8-024a-47e2-bdf9-0b2002458efb.png)
   >![图片](https://user-images.githubusercontent.com/85469000/177249056-3e3e2321-ff49-4a85-839a-0165ff3e5c9d.png)
   
   The dummy parameter set and process parameter set for PONG are similar, they are omited.
   
-  Next, the data out EDMA is set. Data out EDMA is triggered by the completion of process parameter sets. It move the data from HWA local memory to radar cube. It also trigger the data out one hot signature EDMA.
+  Next, the data out EDMA is set. Data out EDMA is triggered by the completion of process parameter sets. It move the data from HWA local memory to radar cube. It also trigger the data out one hot signature EDMA. 
   >![图片](https://user-images.githubusercontent.com/85469000/177249313-9de6e9be-4101-4ff3-b065-199ddd5eeedb.png)
   >![图片](https://user-images.githubusercontent.com/85469000/177249432-1083df12-977c-4ab7-81be-8050abdefa91.png)
   
@@ -179,7 +180,7 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   >![图片](https://user-images.githubusercontent.com/85469000/177260640-865f0468-1546-43a6-8d3c-efbd19d2a208.png)
   >![图片](https://user-images.githubusercontent.com/85469000/177260772-204b9c87-f799-4c4b-8d2c-af1dd8be0a5b.png)\
   
-  Then, each of them is loaded with correct sourceAddr and destAddr.
+  Then, each of them is loaded with correct sourceAddr and destAddr. The setting for data out EDMA is finished.
   >![图片](https://user-images.githubusercontent.com/85469000/177260832-af07f956-9dd8-41e7-b4c0-4ffe029a4105.png)
 
 
