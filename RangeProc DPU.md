@@ -183,9 +183,33 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   Then, each of them is loaded with correct sourceAddr and destAddr. The setting for data out EDMA is finished.
   >![图片](https://user-images.githubusercontent.com/85469000/177260832-af07f956-9dd8-41e7-b4c0-4ffe029a4105.png)
 
+  Thus far, the *DPU_RangeProcHWA_config()* is completed. Back to *hwa_main.c*. The code next call *DPU_RangeProcHWA_control()* to trigger the HWA. 
+  >![图片](https://user-images.githubusercontent.com/85469000/177270338-51175573-bb28-4570-ba98-23b3a63bac3e.png)
+  
+  *DPU_RangeProcHWA_control()* then call *rangeProcHWA_TriggerHWA()*:
+  >![图片](https://user-images.githubusercontent.com/85469000/177270704-aa996dc6-4682-4652-89bc-0dec2fd0cf88.png)
+  
+  *rangeProcHWA_TriggerHWA()* then configurate the common parameters of HWA and trigger the two data out parameter sets. The common parameters include start and end IDX of parameter sets and some FFT settings.
+  >![图片](https://user-images.githubusercontent.com/85469000/177270813-d22535ef-7046-46e7-a1d4-550440907a70.png)
+
+  After triggering the HWA, the code copy the data into ADC buffer:
+  >![图片](https://user-images.githubusercontent.com/85469000/177271307-66612601-2cea-4c4b-801b-5d11a3f6c4c3.png)
+  
+  In this test, there is only 1 RX ant and 64 samples. Thus, 64 data are copied into *adcDataIn*:
+  >![图片](https://user-images.githubusercontent.com/85469000/177272803-411f943b-1488-4586-9772-c9a8a9d67776.png)
+  >![图片](https://user-images.githubusercontent.com/85469000/177272944-3df27ef1-9d33-4ddb-9ffc-926fb46f387d.png)
+
+  Then, the data in EDMA is triggered:
+  >![图片](https://user-images.githubusercontent.com/85469000/177273103-4559041d-781a-4ca4-9f33-77ce066bea5f.png)
+  
+  Next, *DPU_RangeProcHWA_process()* is called, which set some indicators, pend until both HWA and EDMA is finished, disable the HWA done interrupte and HWA itself.
+  >![图片](https://user-images.githubusercontent.com/85469000/177273317-b963e612-b511-43de-b802-e18e46b72111.png)
+  
+  Lastly, the result is checked.
 
 
 
+  
 
 
   
