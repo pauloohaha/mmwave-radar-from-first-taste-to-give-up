@@ -6,7 +6,74 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   1. [Further notes on EDMA](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/Datapath/Further%20notes%20on%20EDMA.md#further-notes-on-edma)  
   2. [Radar Hardware Accelerator](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/Datapath/Further%20notes%20on%20Radar%20Hardware%20Accelerator.md#radar-hardware-accelerator)  
   
-## Code explaination
+## DSP Code explaination
+  
+  DSP is much easier to use than HWA, thus I introduce the usage of DSP to do range FFT first.  
+  The test code below are from *mmwave_sdk_<ver>\packages\ti\datapath\dpu\rangeproc\test\rangeprocdsp_test.c*  
+  The lib functions for dpu are located at *mmwave_sdk_<ver>\packages\ti\datapath\dpu\rangeproc\src\rangeprocdsp.c*  
+  Like every C code, the test code start with main, which initialize the SOC and start a thread to execute *rangeProcDpuTest_Task()*  
+  
+  The "rangeProcDpuTest_Task()* first initialize EMDA, DSP and configurate the DPU.  
+  >![image](https://user-images.githubusercontent.com/85469000/179467039-df7619fa-061b-4ad5-9bff-fbf7dd33aa17.png)
+  
+  Like introduced in [Further notes on EDMA](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/Datapath/Further%20notes%20on%20EDMA.md#further-notes-on-edma), The *rangeProcDpuTest_edmaInit()* initialize every EDMA instance and configurate the error monitoring.
+  >![image](https://user-images.githubusercontent.com/85469000/179467326-30ce161c-46f6-463f-a19b-8f03cbee39bd.png)
+
+  The *rangeProcDpuTest_dpuInit()* call *DPU_RangeProcDSP_init*, which is responsible for initializing the memory for *rangeProcObj*:
+  >![image](https://user-images.githubusercontent.com/85469000/179467866-7f25f6ee-5307-4c6c-ad8e-f7a770a21fd1.png)
+  
+  The "rangeProcDpuTest_dpuCfg()" is responsible for initializing the *rangeProcDpuCfg*, including the ADCbuffer data format, window coefficient, radar cube and so on:
+  >![image](https://user-images.githubusercontent.com/85469000/179469237-f4315d2a-a747-4073-9016-117fb46eb459.png)
+  
+  Next, the code loop through each test case from the test file:  
+  >![image](https://user-images.githubusercontent.com/85469000/179470194-ea10befd-17c5-4373-b449-712f10beae6c.png)
+  
+  In each test, the code call *Test_setProfile()* to set the numTX ANT and num RX ANT, windoeing, data in/out EDMA channel and radar cube.  
+  >![image](https://user-images.githubusercontent.com/85469000/179471452-cc22a260-dbe5-461c-899c-71e154ea565a.png)
+  
+  Then the code call *DPU_RangeProcDSP_config()*, it first validate the parametersm, copy all the settings from *rangeProcDpuCfg* into *rangeProcDpuHandle*:  
+  >![image](https://user-images.githubusercontent.com/85469000/179472137-bd89e458-1814-4f3b-bb8d-3c9202e0b0ce.png)
+  >![image](https://user-images.githubusercontent.com/85469000/179472371-63122a68-a3f8-4963-aac1-4f35aca0fba3.png)
+
+  Then, the data in/out EDMA are configurated:
+  >![image](https://user-images.githubusercontent.com/85469000/179472448-19b96af8-5ef3-41d6-97ae-c25f480b45ed.png)  
+  
+  rangeProcDSP_Config DataIn EDMA, the PING is as follow:  
+  >![image](https://user-images.githubusercontent.com/85469000/179472909-25e4a797-7696-4ae9-8fab-7ff41d03ba54.png)
+  >![image](https://user-images.githubusercontent.com/85469000/179472776-71140340-e439-45dc-973f-ddfb879d0107.png)  
+  
+  The PONG data in EDMA is offset by data length of 1 RX ant:
+  >![image](https://user-images.githubusercontent.com/85469000/179475079-1ed00e42-8382-481d-9327-3388d9014745.png)
+  
+  For data out EDMA, it moves data from address *fftOut1D*, which is DSP internal memory, to *radarCubebuf*
+  
+  Then, the code move the source data into ADC buffer.
+  
+  Next, *DPU_RangeProcDSP_process* is called for every chirp. It is responsible for set the source address data in EDMA, since every chirp the address is increased by * numAdcSampleAligned *, the soource address needed to be updated every loop:  
+  >![image](https://user-images.githubusercontent.com/85469000/179473332-f42adad6-912d-4394-855b-f8ffcbe6173d.png)
+
+  A marco *pingPongId()* is used to determine whether it is PING or PONG:  
+  >![image](https://user-images.githubusercontent.com/85469000/179475896-8f7e80cd-c8a8-469d-85fc-b90146740713.png)
+
+  The code first kick off the PING data in EDMA, then start the loop for processing each RX antenna. For each RX antenna, it first kick off the data in EDMA for next loop:  
+  >![image](https://user-images.githubusercontent.com/85469000/179477030-27d68774-bb73-4a34-a8f6-ad7d60d34d4e.png)
+  
+  Then, call *mmwavelib_windowing16x16_evenlen* and *DSP_fft16x16_imre* to do the windowing and FFT.
+  >![image](https://user-images.githubusercontent.com/85469000/179477108-40f3a19c-409e-4226-86ca-bdef79c88d2b.png)
+  
+  Next is DC removal, but they are not key point here:
+  >![image](https://user-images.githubusercontent.com/85469000/179477525-5a965d66-74b2-45cd-ac8d-171a13a23e45.png)
+
+  In some special case, the destination address of data out EDMA need to be set manually:  
+  >![image](https://user-images.githubusercontent.com/85469000/179477835-28118ff3-77b0-498d-b761-0752a9b10e07.png)
+  
+  Kick off the EDMA for data out, if it is the last chirp, wait until the EDMA is finished:  
+  >![image](https://user-images.githubusercontent.com/85469000/179477987-24c0f97d-ede4-42d0-8d16-e64d7821c54a.png)
+  
+  Then, the FFT is done.
+
+  
+## HWA Code explaination
   The test code below are from *mmwave_sdk_<ver>\packages\ti\datapath\dpu\rangeproc\test\hwa_main.c*  
   The lib functions for dpu are located at *mmwave_sdk_<ver>\packages\ti\datapath\dpu\rangeproc\src\rangeprochwa.c*  
   Like every C code, the test code start with *main()*. It initialize the SOC and start a thread to execute *rangeProcDpuTest_Task()*.
