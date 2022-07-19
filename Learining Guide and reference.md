@@ -61,7 +61,7 @@ Here I reference all other useful materials.
 Located at mmwave_industrial_toolbox_<ver>\docs\hardware_guides. It includes how to set the hardware switches on the EVM module and MMWAVEICBOOST to set the radar EVM operate at stand alone mode or debug mode. The [video version](https://training.ti.com/hardware-setup-mmwaveicboost-and-antenna-module) is also helpful.  
   
 2. [Programming Chirp Parameters in TI Radar Devices](https://www.ti.com/lit/pdf/swra553)  
-This document describes how to set the chirp parameters in details.
+This document describes how to set the chirp parameters in details. It also introduce the concept of chirps, profiles, frames, subframes and so on. It provide a guidline of how to set the BSS through APIs.  
   
 3. [Radar Hardware Accelerator](https://www.ti.com/lit/swru526)  
 This document introduce the hardware accelerator in details.
