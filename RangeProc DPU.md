@@ -78,13 +78,13 @@ The first step of the data processing is do the FFT on ADC samples for range cal
 ### Conclusion
   The usafe of HWA dpu is listed here in conclusion, the detail inside of the HWA rangeProc DPU will be introduced later.  
   
-  1. Init HWA, get the HWA handle: *HWA_init()*, *hwaHandle = HWA_open(0, socHandle, &errorCode)*;  
-  2. Init EDMA, get the EDMA handle, set the error monitor: *EDMA_init(inst)*, *edmaHandle = EDMA_open(0, &errorCode, &edmaInstanceInfo)*, *EDMA_configErrorMonitoring(edmaHandle, &errorConfig)*.  
-  3. Init dpu: *rangeProcDpuHandle =  DPU_RangeProcHWA_init (&initParams, &errorCode)*.  
-  4. Config dpu: *DPU_RangeProcHWA_config (rangeProcDpuHandle, &rangeProcDpuCfg);*.  
-  5. control DPU: *retVal = DPU_RangeProcHWA_control(rangeProcDpuHandle, DPU_RangeProcHWA_Cmd_triggerProc, NULL, 0);*.  
-  6. start DPU: *retVal = DPU_RangeProcHWA_process(rangeProcDpuHandle, &outParms);*.  
-  7. Clean up: *EDMA_close(edmaHandle); HWA_close(hwaHandle); DPU_RangeProcHWA_deinit(rangeProcDpuHandle);*
+  1. Init HWA, get the HWA handle: **HWA_init()**, **hwaHandle = HWA_open(0, socHandle, &errorCode)**;  
+  2. Init EDMA, get the EDMA handle, set the error monitor: **EDMA_init(inst)**, **edmaHandle = EDMA_open(0, &errorCode, &edmaInstanceInfo)**, **EDMA_configErrorMonitoring(edmaHandle, &errorConfig)**.  
+  3. Init dpu: **rangeProcDpuHandle =  DPU_RangeProcHWA_init (&initParams, &errorCode)**.  
+  4. Config dpu: **DPU_RangeProcHWA_config (rangeProcDpuHandle, &rangeProcDpuCfg);**.  
+  5. control DPU: **retVal = DPU_RangeProcHWA_control(rangeProcDpuHandle, DPU_RangeProcHWA_Cmd_triggerProc, NULL, 0);**.  
+  6. start DPU: **retVal = DPU_RangeProcHWA_process(rangeProcDpuHandle, &outParms);**.  
+  7. Clean up: **EDMA_close(edmaHandle); HWA_close(hwaHandle); DPU_RangeProcHWA_deinit(rangeProcDpuHandle);**
   
 ### Inside DPU
   
