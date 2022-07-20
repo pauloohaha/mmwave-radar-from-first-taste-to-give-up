@@ -74,6 +74,20 @@ The first step of the data processing is do the FFT on ADC samples for range cal
 
   
 ## HWA Code explaination
+  
+### Conclusion
+  The usafe of HWA dpu is listed here in conclusion, the detail inside of the HWA rangeProc DPU will be introduced later.  
+  
+  1. Init HWA, get the HWA handle: *HWA_init()*, *hwaHandle = HWA_open(0, socHandle, &errorCode)*;  
+  2. Init EDMA, get the EDMA handle, set the error monitor: *EDMA_init(inst)*, *edmaHandle = EDMA_open(0, &errorCode, &edmaInstanceInfo)*, *EDMA_configErrorMonitoring(edmaHandle, &errorConfig)*.  
+  3. Init dpu: *rangeProcDpuHandle =  DPU_RangeProcHWA_init (&initParams, &errorCode)*.  
+  4. Config dpu: *DPU_RangeProcHWA_config (rangeProcDpuHandle, &rangeProcDpuCfg);*.  
+  5. control DPU: *retVal = DPU_RangeProcHWA_control(rangeProcDpuHandle, DPU_RangeProcHWA_Cmd_triggerProc, NULL, 0);*.  
+  6. start DPU: *retVal = DPU_RangeProcHWA_process(rangeProcDpuHandle, &outParms);*.  
+  7. Clean up: *EDMA_close(edmaHandle); HWA_close(hwaHandle); DPU_RangeProcHWA_deinit(rangeProcDpuHandle);*
+  
+### Inside DPU
+  
   The test code below are from *mmwave_sdk_<ver>\packages\ti\datapath\dpu\rangeproc\test\hwa_main.c*  
   The lib functions for dpu are located at *mmwave_sdk_<ver>\packages\ti\datapath\dpu\rangeproc\src\rangeprochwa.c*  
   Like every C code, the test code start with *main()*. It initialize the SOC and start a thread to execute *rangeProcDpuTest_Task()*.
