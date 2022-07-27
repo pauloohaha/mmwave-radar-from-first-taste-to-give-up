@@ -1,8 +1,4 @@
-This contains some notes for myself.  
+### A cfg update
+Cli thread receive the updated cfg, call the *cmdHandlerFxn()* to execute the update. Take "clutterRemoval" as exaple, *CLI_task()* call *MmwDemo_CLIClutterRemoval()* to execute the update, which call *MmwDemo_CfgUpdate()* to change the cfg in *gMmwMCB.subFrameCfg[indx]* and call *MmwDemo_setSubFramePendingState()* to notify that an update is pending, by writing 1 to *subFrameCfg->objDetDynCfg.isXXXPending*.  
   
-18.5.22 Rebuilt the RangeProcDPU test with optimization disabled at J:\ti\mmwave_sdk_03_05_00_04\packages\ti\common\mmwave_sdk.mak -O3 => -Ooff
-
-
-https://e2e.ti.com/support/sensors-group/sensors/f/sensors-forum/899453/ccs-iwr6843isk-bypass-cli-in-mmwave-demo
-
-rangeIdxToMeters: 0.043602120536642454
+When *MmwDemo_DPC_ObjectDetection_dpmTask()* finish one *DPM_execute()*, it execute the *MmwDemo_processPendingDynamicCfgCommands()* to execute the update, which go through *subFrameCfg->objDetDynCfg.isXXXPending* and execute the change if there is an update pending.
