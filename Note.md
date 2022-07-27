@@ -4,3 +4,5 @@ This contains some notes for myself.
 
 
 https://e2e.ti.com/support/sensors-group/sensors/f/sensors-forum/899453/ccs-iwr6843isk-bypass-cli-in-mmwave-demo
+
+rangeIdxToMeters: 0.043602120536642454
