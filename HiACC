@@ -1,4 +1,0 @@
-The *Level sensing* lab in mmavw industrial toolbox demo the high accuracy range detection capability of mmwave radar. It uses both mss and dss, the data path is mainly realized on dss.  
-  
-  In *dss_main.c*, the *MmwDemo_dssDataPathProcessEvents* is responsible for performing chirp processing. For each chirp, it call *MmwDemo_processChirp* to copy data from ADC buffer and process them:
-  #
