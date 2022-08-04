@@ -50,13 +50,13 @@ For a specific coarse FFT bin *i*, it compute the FFT with frequency (2pi/N\*i +
 ![image](https://user-images.githubusercontent.com/85469000/182783857-c396c852-bcc6-4032-8691-99bddb5fa609.png)
 In the euqation, the i\*k is *tempCoarseSearchIdx*, the j\*k is *tempFineSearchIdx*. If the j\*k exceed the fft1Dsize, the exceeded part will be added to the *tempCoarseSearchIdx*. The *tempIndFine1* is *tempFineSearchIdx* % fft1Dsize, which is the j\*k part. The *tempIndFine2* is *tempFineSearchIdx* / fft1dsize, which is the exceeded part, which will be added to i\*k. *tempCoarseSearchIdx* is the i\*k, it is initialized as 0 and be added i for each loop. *tempIndCoarse* is the i\*k plus the exceeded part from the fine FFT.  
 
-The *wncPtr* and *wnfPtr* are *exp(-2 * pi / N)[k]* and *exp(-2 * pi / N^2)[k]* initialized earlier:
+The *wncPtr* and *wnfPtr* are *exp(-2 * pi / N)[k]* and *exp(-2 * pi / N^2)[k]* initialized earlier:  
 ![image](https://user-images.githubusercontent.com/85469000/182783648-78d24f49-d31e-4a39-9680-852d119985ef.png)
 
-Here perform the actuall FFT, the f2input is first get the input from *&inputPtr[k]*, which is then multiplied with the corresponding *exp(j \* -2pi/N \*tempIndCoarse)* and *exp(j \* -2pi/N^2 \* tempIndFine1)*. The result is accumulated in to *sigAcc*.
+Here perform the actuall FFT, the f2input is first get the input from *&inputPtr[k]*, which is then multiplied with the corresponding *exp(j \* -2pi/N \*tempIndCoarse)* and *exp(j \* -2pi/N^2 \* tempIndFine1)*. The result is accumulated in to *sigAcc*.  
 ![image](https://user-images.githubusercontent.com/85469000/182783920-c5840bb0-6e9d-4848-ba8a-c399d49e65e0.png)
 
-After each iteration, the accumulated result's aboslut value is calculated and the max result is recorded. The *itemp* record the fine FFT index starting from the *zoomStartInd*.
+After each iteration, the accumulated result's aboslut value is calculated and the max result is recorded. The *itemp* record the fine FFT index starting from the *zoomStartInd*.  
 ![image](https://user-images.githubusercontent.com/85469000/182784555-6be9dcae-294a-4dd1-87da-fc31b8216daf.png)
 
 After the peak is found, we need to calculate the range according to the frequency of the peak. The *interpIndx* is replated to some finetune between the previous, max and next pin, this should not matter very much. The *fdelta* is *maxBeatFreq* / *fft1DSize ^ 2*. The *maxBeatFreq* should be the sampling frequency of the ADC, so the *fdelta* is the frequency between 2 fine FFT points. *freqFineEst* is then *fdelta* x (*fft1IDsize* x *zoomStartInd* + *fineRangeInd*), which should be the frequency of the peak found by the fine FFT. The time between the start of the chirp is the freq. of the peak divided by the slop of the chirp, which is *freqFineEst* x *chirpRampTime* / *chirpBandwidth*. The distance of the object is then the time of fly times the velocity of the light divided by 2.
