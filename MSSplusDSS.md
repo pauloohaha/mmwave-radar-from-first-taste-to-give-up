@@ -1,5 +1,5 @@
 # MSS and DSS
-In this document, I will introduce the inilialization process of the DPC in distributed mode. The document is from *xwr68xx mmw Demo (for xWR68xx ISK board)* in SDK document.  
+In this document, I will introduce the inilialization process of the DPC in distributed mode and how the data path is configurated and triggered. The document is from *xwr68xx mmw Demo (for xWR68xx ISK board)* in SDK document.  
 
 In this demo, the range proc is executed on HWA and rest of the processing are executed on DSP. This is controlled by *OBJDET_NO_RANGE* defined in mss and dss makefile.  
 
