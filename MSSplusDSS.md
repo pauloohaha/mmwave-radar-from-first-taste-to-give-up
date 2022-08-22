@@ -48,5 +48,6 @@ In MSS, *DPC_ObjectDetection_execute()* is responsible for waiting for HWA to co
 After the range FFT is completed, *DPM_relayResult()* -> *ptrDPM->ptrDomainFxnTable->sendResult* -> *DPM_mboxSendResult()* is called to send result to DSS. It send a message into DPM message pipeline:  
 ![image](https://user-images.githubusercontent.com/85469000/185853683-39693156-3e74-42e9-a942-ececf8cd7a65.png)
 
-The *DPM_execut()* at DSS receive the message and call *DPM_msgResultHandler()* to handle. It then call *ptrDPM->procChainCfg.injectDataFxn* -> *DPC_ObjectDetection_dataInjection* -> *DPM_notifyExecute* to notify execute.
+The *DPM_execut()* at DSS receive the message and call *DPM_msgResultHandler()* to handle. It then call *ptrDPM->procChainCfg.injectDataFxn* -> *DPC_ObjectDetection_dataInjection* -> *DPM_notifyExecute* to notify execute.  
 
+In this way, the DSS start to execute the inter frame processing *DPC_ObjectDetection_execute()*.
