@@ -51,3 +51,8 @@ After the range FFT is completed, *DPM_relayResult()* -> *ptrDPM->ptrDomainFxnTa
 The *DPM_execut()* at DSS receive the message and call *DPM_msgResultHandler()* to handle. It then call *ptrDPM->procChainCfg.injectDataFxn* -> *DPC_ObjectDetection_dataInjection* -> *DPM_notifyExecute* to notify execute.  
 
 In this way, the DSS start to execute the inter frame processing *DPC_ObjectDetection_execute()*.
+
+## Send result
+In *MmwDemo_DPC_ObjectDetection_dpmTask*, which include an endless loop to call *DPM_execute()*, it initialize the data structure for result buffer and send the pointer into *DPM_execute()*. The DPM pass the pointer to DPC execute function, which record the result into the buffer after process.  
+
+After *DPM_execute()*, finished, the *MmwDemo_DPC_ObjectDetection_dpmTask* check whether the result is valid. If so, it update the statistic information and send it to MSS through*DPM_sendResult()*. It send a *DPM_MessageId_RESULT* type message into DPM message pipeline. The MSS receive the message through *DPM_execute()* -> *DPM_msgRecv()* -> *DPM_msgResultHandler()* -> *ptrDPM->initCfg.reportFxn()* -> *MmwDemo_DPC_ObjectDetection_reportFxn()* -> *MmwDemo_handleObjectDetResult()* to handle and send out the results.
