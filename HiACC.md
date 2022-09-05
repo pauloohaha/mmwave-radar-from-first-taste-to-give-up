@@ -62,6 +62,30 @@ After each iteration, the accumulated result's aboslut value is calculated and t
 After the peak is found, we need to calculate the range according to the frequency of the peak. The *interpIndx* is replated to some finetune between the previous, max and next pin, this should not matter very much. The *fdelta* is *maxBeatFreq* / *fft1DSize ^ 2*. The *maxBeatFreq* should be the sampling frequency of the ADC, so the *fdelta* is the frequency between 2 fine FFT points. *freqFineEst* is then *fdelta* x (*fft1IDsize* x *zoomStartInd* + *fineRangeInd*), which should be the frequency of the peak found by the fine FFT. The time between the start of the chirp is the freq. of the peak divided by the slop of the chirp, which is *freqFineEst* x *chirpRampTime* / *chirpBandwidth*. The distance of the object is then the time of fly times the velocity of the light divided by 2.
 ![image](https://user-images.githubusercontent.com/85469000/182800771-f308b669-e3b2-4a35-9815-0e9b23ac7a01.png)
 
+## Send the result back to MSS
+After the *RADARDEMO_highAccuRangeProc_run()*, the results are stored in *dataPathObj->outputDataToArm*.
+>![image](https://user-images.githubusercontent.com/85469000/188406839-5b8a71b9-34a3-4eb4-8e31-225d6c724bea.png)
+
+Then, *MmwDemo_dssDataPathOutputLogging()* -> *MmwDemo_dssSendProcessOutputToMSS()* is called to send a mailbox message to MSS:
+>![image](https://user-images.githubusercontent.com/85469000/188407142-72e23195-c415-4af2-b9e2-18f4d8b4c26a.png)
+
+It first get the address of the data header of *outputDataToArm*:
+>![image](https://user-images.githubusercontent.com/85469000/188407270-162ce8e8-1c0c-4833-b059-96b61409eb5d.png)
+
+Since *outputToARM_t* is defined as follow, the output data ?*radarProcessOutput_t* is right after the output data header.
+>![image](https://user-images.githubusercontent.com/85469000/188407464-1947a402-4d16-4f55-93c0-bc4867e54a98.png)
+
+Next, the code intialize the data header:
+>![image](https://user-images.githubusercontent.com/85469000/188407753-1e96d79c-c725-4766-8b9f-7da44bce1ab4.png)
+
+And send a mailbox message hat contain the address of the data header and the total data size of header plus data to MSS.
+>![image](https://user-images.githubusercontent.com/85469000/188407817-64a9e0ca-a530-4762-96b2-9f0d9e3d44b8.png)
+
+When MSS receive the data, it translate the address of *message.body.detObj.detObjOutAddress*, which is equivalent to the address of  *ptrDetOutputHdr* = *outputDataToArm* in DSS, to the address in MSS and copy the data into *gMmwMssMCB.mssDataPathObj.inputInfo*.
+>![image](https://user-images.githubusercontent.com/85469000/188408073-b800f2c3-7230-4adc-850a-b3c5b64a5c69.png)
+
+Then send out the data through UART:
+>![image](https://user-images.githubusercontent.com/85469000/188408594-04f24759-6e36-4898-896b-7c1fd5b44ecc.png)
 
 
 
