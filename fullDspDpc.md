@@ -97,6 +97,6 @@ Since the LVDS driver is intialized on MSS, it should uses the MSS EDMA instance
 ## Run the full DSP DPC
 Normally the radar is set to send frames of chirps one after another. But in debug mode, the program is halt and may not be able to handle the chirp event. This will cause an error. Thus to debug the program, you need to set the cli command for *frameCfg* to send one frame only, which is setting the 4th arguement *number of frames* to 1. In this way, we can safely halt the program without causing any error.  
 
-If you have sorted out all the bugs, you should see the following message in console:
+If you have sorted out all the bugs, you should see the following message in console, without any error messgae after it.  
 ![image](https://user-images.githubusercontent.com/85469000/189818260-2d0143fc-19ba-4bb3-a91c-56abdf52b541.png)
 
