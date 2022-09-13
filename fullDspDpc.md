@@ -2,6 +2,13 @@
 
 Link to the full [DSP DPC code](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/main/xwr68xxFullDPC.zip):
 
+## Usage
+### CCS debug
+Use the *xwr68xx_mmw_demo_mss.xer4f* and *xwr68xx_mmw_demo_dss.xe674* to load into the r4f and c674 in the CCS debug mode with MMWAVEICBOOST to run the code.  
+
+### Compilation
+Copy the *mmw_res.h* to the installed SDK path (mmwave_sdk_03_05_00_04\packages\ti\demo\xwr68xx\mmw) to replace the orighinal *mmw_res.h* (remember to back up it). Then run the setenv.bat at *mmwave_sdk_03_05_00_04\packages\scripts\windows* though command line then cd to this folder and run *gmake clean* and *gmake all*.
+
 ## Intro
 The out of box demos provided by the TI for IWR6843AOP use either full HWA or HWA+DSP data path to do the data processing, both of which uses HWA to do the range FFT. This prevent us from accessing the raw ADC buffer data directly, since the HWA destroy the ADC buffer data after FFT is done. Besides, DSP is also easier to control and program than HWA. Thus, realizing a full DSP data path is helpful for development.  
 
