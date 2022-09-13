@@ -77,3 +77,10 @@ EDMA instances and handles are allocated to each DPU in *mmw_res.h*. Since the c
 
 In the *mmw_mss.mak* and *mmw_dss.mak*, the path to *mmw_res.h* is specified as the original path to the mmw_demo folder, we need to make change to the original *mss_res.h* file.  
 ![image](https://user-images.githubusercontent.com/85469000/189815596-bfc09b5c-e93b-4f84-a866-512c2edb31a1.png)
+
+After copying the *mme_res.h* from xWR16xx demo folder to the xWR68xx folder, we need to add following defination into it. The IWR6843AOP has 2 EDMA channel controller, which is the 2 EDMA instance, one is allocated to the MSS and the other is allocated to the DSS. Since the DPC is realised entirly on DSP, the DPC EDMA instance uses the DSP EDMA instance.  
+>![image](https://user-images.githubusercontent.com/85469000/189816003-6fedb497-f312-4d4a-9b6a-c353a8ee0418.png)
+
+Since the LVDS driver is intialized on MSS, it should uses the MSS EDMA instance.
+![image](https://user-images.githubusercontent.com/85469000/189816193-7865ca28-04e9-4a8b-b4de-a2c586330b26.png)
+
