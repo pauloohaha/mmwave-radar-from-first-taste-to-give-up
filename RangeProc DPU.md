@@ -47,6 +47,7 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   >![image](https://user-images.githubusercontent.com/85469000/179475079-1ed00e42-8382-481d-9327-3388d9014745.png)
   
   For data out EDMA, it moves data from address *fftOut1D*, with length of 2 * numRxAntennas *numRangeBins, storing FFT result of 2 TX ANTs, to *radarCubebuf*. The data out EDMA is AB type EDMA, which means each EDMA transfer event will transfer ACNT * BCNT data. In this data out EDMA, ACNT is set to the length of the range FFT result of one RX ANT of one chirp. BCNT is set to numRxAntennas. Each transfer event transfer the data of one TX ANT of one chirp.  
+  >![image](https://user-images.githubusercontent.com/85469000/190599064-bc1c72bb-4530-4195-97de-e37e916882fa.png)
   >![image](https://user-images.githubusercontent.com/85469000/190597893-7b21f6b4-1c9f-4d1a-b5ef-6e64a0bbf711.png)
   >![image](https://user-images.githubusercontent.com/85469000/190595828-d0197c57-afad-4998-8d79-03824c193a27.png)
 
