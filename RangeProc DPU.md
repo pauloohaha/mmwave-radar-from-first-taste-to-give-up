@@ -38,14 +38,18 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   Then, the data in/out EDMA are configurated:
   >![image](https://user-images.githubusercontent.com/85469000/179472448-19b96af8-5ef3-41d6-97ae-c25f480b45ed.png)  
   
-  rangeProcDSP_Config DataIn EDMA, the PING is as follow:  
+  rangeProcDSP_Config DataIn EDMA. It define a *adcDataIn*, with length of 2*numRangeBins, it can store 2 RX ANT data for PING PONG.  
+  >![image](https://user-images.githubusercontent.com/85469000/190597857-fd722eec-1210-46a7-a0a7-703cf94cb485.png) 
   >![image](https://user-images.githubusercontent.com/85469000/179472909-25e4a797-7696-4ae9-8fab-7ff41d03ba54.png)
   >![image](https://user-images.githubusercontent.com/85469000/179472776-71140340-e439-45dc-973f-ddfb879d0107.png)  
   
   The PONG data in EDMA is offset by data length of 1 RX ant:
   >![image](https://user-images.githubusercontent.com/85469000/179475079-1ed00e42-8382-481d-9327-3388d9014745.png)
   
-  For data out EDMA, it moves data from address *fftOut1D*, which is DSP internal memory, to *radarCubebuf*
+  For data out EDMA, it moves data from address *fftOut1D*, with length of 2 * numRxAntennas *numRangeBins, storing FFT result of 2 TX ANTs, to *radarCubebuf*. The data out EDMA is AB type EDMA, which means each EDMA transfer event will transfer ACNT * BCNT data. In this data out EDMA, ACNT is set to the length of the range FFT result of one RX ANT of one chirp. BCNT is set to numRxAntennas. Each transfer event transfer the data of one TX ANT of one chirp.  
+  >![image](https://user-images.githubusercontent.com/85469000/190597893-7b21f6b4-1c9f-4d1a-b5ef-6e64a0bbf711.png)
+  >![image](https://user-images.githubusercontent.com/85469000/190595828-d0197c57-afad-4998-8d79-03824c193a27.png)
+
   
   Then, the code move the source data into ADC buffer.
   
