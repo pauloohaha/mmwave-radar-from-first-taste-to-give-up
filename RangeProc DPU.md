@@ -50,7 +50,10 @@ The first step of the data processing is do the FFT on ADC samples for range cal
   >![image](https://user-images.githubusercontent.com/85469000/190597893-7b21f6b4-1c9f-4d1a-b5ef-6e64a0bbf711.png)
   >![image](https://user-images.githubusercontent.com/85469000/190595828-d0197c57-afad-4998-8d79-03824c193a27.png)
 
-  
+  For 3 TX ANT case, the destination address of data out EDMA is set each time before the transfer is kicked off, it points to the starting address of one chirp in one TX ANT part:  
+  >![image](https://user-images.githubusercontent.com/85469000/190598232-701bbf98-86b4-4bad-b96f-7d6638102b99.png)
+  >![image](https://user-images.githubusercontent.com/85469000/190598375-5a090828-b053-4b14-b0d6-04d2344e38b6.png)
+
   Then, the code move the source data into ADC buffer.
   
   Next, *DPU_RangeProcDSP_process* is called for every chirp. It is responsible for set the source address data in EDMA, since every chirp the address is increased by * numAdcSampleAligned *, the soource address needed to be updated every loop:  
