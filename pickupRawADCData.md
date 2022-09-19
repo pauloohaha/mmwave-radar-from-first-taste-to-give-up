@@ -17,7 +17,7 @@ In *objectdetection.h* -> *DPC_ObjectDetection_execute()*, the four data will be
 
 ## Modification made
 1.  
-In *objectdetecion.h*, define the four datas in *DPC_ObjectDetection_ExecuteResult_t*.  
+In *objectdetecion.h*, define the four datas in *objectdetection.h* -> *DPC_ObjectDetection_ExecuteResult*, *rangeprocdsp_internal.h* -> *rangeProcDSPObj*, and *rangeprocdsp.h* -> *DPU_RangeProcDSP_HW_Resources*.  
 >![image](https://user-images.githubusercontent.com/85469000/190367988-c93e6130-194b-45e6-ac18-835b541ec96c.png)
 
 
