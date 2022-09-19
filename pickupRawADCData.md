@@ -46,7 +46,7 @@ receive it:
 Load the address into hw resource:  
 ![image](https://user-images.githubusercontent.com/85469000/190369734-c3171662-0ec6-40b5-96f4-ca73a78aeeb1.png)
   
-In *rangeProcDSP_ParseConfig*, load the address of 4 data from *hwRes* = *pHwRes* into *rangeProcObj* = *dpuHandle*.
+In *DPU_RangeProcDSP_config* -> *rangeProcDSP_ParseConfig*, load the address of 4 data from *hwRes* = *pHwRes* into *rangeProcObj* = *dpuHandle*.
 ![image](https://user-images.githubusercontent.com/85469000/190370242-e2691c80-93a6-4393-8a0a-f4f7f85283c6.png)
 
 4.
