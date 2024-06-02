@@ -1,7 +1,7 @@
 # mmwave-radar-from-first-taste-to-give-up
 I am a student who try to use mmwave radar from Texas Instrument (TI) to do some projects. I will try to formulate some of my understanding here and they may help others.
 
-If you are a beginner, I will recommend you go through the [learning guide](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/main/Reference.md#learining-guide-and-reference). I introduce some basic idea and put some useful documents there.
+If you are a beginner, I will recommend you go through the [learning guide](https://github.com/pauloohaha/mmwave-radar-from-first-taste-to-give-up/blob/2366bb83f49f4aefdf32ee61b63d935c68d2a57e/Learining%20Guide%20and%20reference.md). I introduce some basic idea and put some useful documents there.
 
 I mainly use IWR6843AOP and it's evaluation module. I also use MMWAVEICBOOST for debugging.
 
